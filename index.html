@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Visualization & Content Choices: 
-        - Club Value/Player Value: Goal: Show change. Method: Line Chart (Chart.js). Interaction: Hover. Justification: Best for time-series data.
         - Revenue/Sponsorship Breakdown: Goal: Show proportions. Method: Donut Chart (Chart.js). Interaction: Hover. Justification: Clear for part-to-whole analysis.
         - Performance Overview: Goal: Compare. Method: Custom HTML/Tailwind trophy case. Interaction: Static visual. Justification: Provides a quick, impactful summary of the season's contrasting results.
         - Squad Data: Goal: Organize & Compare. Method: Filterable/Sortable HTML Table (JS). Interaction: Filter, Sort, Click for detail. Justification: The most effective method for exploring and comparing a large roster of players.
@@ -30,6 +29,18 @@
         .table-header-sortable:hover { background-color: #f0f0f0; }
         .table-row-clickable { cursor: pointer; transition: background-color 0.2s; }
         .table-row-clickable:hover { background-color: #fcebeb; }
+        .tournament-logo { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: white; margin-right: 8px; }
+        .serie-a-logo { background-color: #0055A4; } /* Blue for Serie A */
+        .champions-league-logo { background-color: #001E5A; } /* Dark blue for UCL */
+        .coppa-italia-logo { background-color: #009246; } /* Green for Coppa Italia */
+        .supercoppa-logo { background-color: #CEB888; } /* Gold for Supercoppa */
+
+        .timeline { list-style-type: none; padding-left: 0; position: relative; }
+        .timeline:before { content: ''; background: #d4d9df; display: inline-block; position: absolute; left: 10px; width: 2px; height: 100%; z-index: 0; }
+        .timeline-item { margin: 20px 0; padding-left: 40px; position: relative; }
+        .timeline-item:before { content: ''; background: white; border: 2px solid #E53935; display: inline-block; position: absolute; border-radius: 50%; left: 0px; width: 24px; height: 24px; z-index: 1; text-align: center; line-height: 20px; font-size: 12px; }
+        .timeline-item-content { background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .timeline-item-title { font-weight: bold; margin-bottom: 5px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -38,21 +49,21 @@
         <nav class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-red-600 text-white font-bold text-sm">ACM</div>
+                    <img src="https://placehold.co/40x40/FF0000/FFFFFF?text=ACM" alt="AC Milan Logo" class="h-8 w-8 rounded-full">
                     <h1 class="text-lg md:text-xl font-bold text-slate-900">Milan 2024-25</h1>
                 </div>
                 <div class="hidden md:flex items-center space-x-2 md:space-x-4">
-                    <a href="#overview" data-target="overview" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">Tổng Quan</a>
-                    <a href="#performance" data-target="performance" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">Thành Tích</a>
-                    <a href="#off-pitch" data-target="off-pitch" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">Tài Chính & Hậu Trường</a>
-                    <a href="#squad" data-target="squad" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">Đội Hình</a>
+                    <a href="#overview" data-target="overview" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📄 Tổng Quan</a>
+                    <a href="#performance" data-target="performance" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📊 Thành Tích</a>
+                    <a href="#off-pitch" data-target="off-pitch" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">💼 Tài Chính & Hậu Trường</a>
+                    <a href="#squad" data-target="squad" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">👥 Đội Hình</a>
                 </div>
                 <div class="md:hidden">
                     <select id="mobile-nav" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
-                        <option value="overview">Tổng Quan</option>
-                        <option value="performance">Thành Tích</option>
-                        <option value="off-pitch">Tài Chính & Hậu Trường</option>
-                        <option value="squad">Đội Hình</option>
+                        <option value="overview">📄 Tổng Quan</option>
+                        <option value="performance">📊 Thành Tích</option>
+                        <option value="off-pitch">💼 Tài Chính & Hậu Trường</option>
+                        <option value="squad">👥 Đội Hình</option>
                     </select>
                 </div>
             </div>
@@ -63,18 +74,18 @@
         
         <section id="overview" class="app-section space-y-8">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900">Mùa Giải Của Những Thái Cực</h2>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📄</span>Mùa Giải Của Những Thái Cực</h2>
                 <p class="mt-2 text-lg text-slate-600">Mùa giải 2024-2025 của AC Milan là một bức tranh phức tạp, nơi vinh quang tại các giải đấu cúp không thể che lấp đi nỗi thất vọng tại Serie A. Báo cáo này phân tích sâu về một năm đầy biến động của Rossoneri, từ sân cỏ đến phòng họp.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500">Vị trí Serie A</h3>
+                    <h3 class="font-semibold text-slate-500 flex items-center"><div class="tournament-logo serie-a-logo">SA</div>Vị trí Serie A</h3>
                     <p class="text-4xl font-bold text-red-700 mt-2">Hạng 8</p>
                     <p class="text-sm text-slate-500 mt-1">Không đủ điều kiện dự cúp Châu Âu</p>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500">Supercoppa Italiana</h3>
+                    <h3 class="font-semibold text-slate-500 flex items-center"><div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana</h3>
                     <p class="text-4xl font-bold text-green-600 mt-2">Vô Địch</p>
                     <p class="text-sm text-slate-500 mt-1">Đánh bại Inter Milan 3-2</p>
                 </div>
@@ -101,6 +112,7 @@
                             <li>Lọt vào chung kết Coppa Italia.</li>
                             <li>Christian Pulisic và Tijjani Reijnders tỏa sáng.</li>
                             <li>Tiếp tục trao cơ hội cho các tài năng trẻ.</li>
+                            <li>Bất bại trước Inter Milan ở các trận derby.</li>
                         </ul>
                     </div>
                     <div class="border-l-4 border-red-500 pl-4">
@@ -119,19 +131,19 @@
 
         <section id="performance" class="app-section space-y-8 hidden">
              <div>
-                <h2 class="text-3xl font-bold text-slate-900">Phân Tích Thành Tích</h2>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📊</span>Phân Tích Thành Tích</h2>
                 <p class="mt-2 text-lg text-slate-600">Khám phá hành trình của AC Milan qua bốn đấu trường chính trong mùa giải 2024-2025: từ vinh quang cúp quốc nội đến sự sa sút ở giải VĐQG và đấu trường châu Âu.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-1">Serie A: Mùa Giải Đầy Thử Thách</h3>
+                    <h3 class="text-2xl font-bold mb-1 flex items-center"><div class="tournament-logo serie-a-logo">SA</div>Serie A: Mùa Giải Đầy Thử Thách</h3>
                     <p class="text-slate-600 mb-4">Kết thúc ở vị trí thứ 8 với 63 điểm là một kết quả đáng thất vọng, cho thấy sự thiếu ổn định nghiêm trọng trong suốt 38 vòng đấu.</p>
                     <div class="chart-container">
                         <canvas id="serieAChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4">Champions League: Dừng Bước Sớm</h3>
+                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo champions-league-logo">CL</div>Champions League: Dừng Bước Sớm</h3>
                     <p class="text-slate-600 mb-4">Dù đã vượt qua vòng bảng, Milan đã bị Feyenoord loại ở vòng play-off, một kết quả dưới kỳ vọng cho một CLB giàu truyền thống châu Âu.</p>
                     <div class="flex flex-col space-y-4">
                         <div class="text-center p-4 bg-slate-100 rounded-lg">
@@ -145,27 +157,42 @@
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4">Coppa Italia: Hành Trình Đến Chung Kết</h3>
+                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo coppa-italia-logo">CI</div>Coppa Italia: Hành Trình Đến Chung Kết</h3>
                      <p class="text-slate-600 mb-4">Milan đã thể hiện bản lĩnh ở các trận đấu loại trực tiếp, vượt qua các đối thủ mạnh để vào chung kết, nhưng lại gục ngã ở ngưỡng cửa thiên đường.</p>
-                    <div class="relative w-full">
-                        <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-300"></div>
-                        <div class="space-y-4">
-                            <div class="text-center relative"> <span class="bg-white px-2 z-10 relative">Vòng 16: vs Sassuolo <b class="text-green-600"> (6-1)</b></span></div>
-                            <div class="text-center relative"> <span class="bg-white px-2 z-10 relative">Tứ kết: vs Roma <b class="text-green-600"> (3-1)</b></span></div>
-                            <div class="text-center relative"> <span class="bg-white px-2 z-10 relative">Bán kết: vs Inter <b class="text-green-600"> (4-1)</b></span></div>
-                            <div class="text-center relative"> <span class="bg-white px-2 z-10 relative">Chung kết: vs Bologna <b class="text-red-600"> (0-1)</b></span></div>
-                        </div>
-                    </div>
+                     <ul class="timeline">
+                        <li class="timeline-item">
+                            <div class="timeline-item-content">
+                                <h4 class="timeline-item-title">Vòng 16 đội</h4>
+                                <p>vs Sassuolo <strong class="text-green-600">(Thắng 6-1)</strong></p>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-item-content">
+                                <h4 class="timeline-item-title">Tứ kết</h4>
+                                <p>vs AS Roma <strong class="text-green-600">(Thắng 3-1)</strong></p>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-item-content">
+                                <h4 class="timeline-item-title">Bán kết</h4>
+                                <p>vs Inter Milan <strong class="text-green-600">(Thắng chung cuộc 4-1)</strong></p>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-item-content">
+                                <h4 class="timeline-item-title">Chung kết</h4>
+                                <p>vs Bologna <strong class="text-red-600">(Thua 0-1)</strong></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4">Supercoppa Italiana: Tia Sáng An Ủi</h3>
+                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana: Tia Sáng An Ủi</h3>
                     <p class="text-slate-600 mb-4">Chiến thắng thuyết phục trước đại kình địch Inter Milan đã mang về danh hiệu duy nhất của mùa giải, một niềm vui hiếm hoi cho các Milanista.</p>
-                     <div class="flex flex-col items-center justify-center h-full">
-                        <div class="text-yellow-500">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM5.05 4.3a.75.75 0 011.06-1.06l1.062 1.062a.75.75 0 11-1.06 1.06L5.05 4.3zM14.95 4.3a.75.75 0 010 1.06l-1.062 1.062a.75.75 0 11-1.06-1.06L14.95 4.3zM2 10a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 012 10zm15.25.75a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM5.05 15.7a.75.75 0 10-1.06-1.06L3.06 15.71a.75.75 0 101.06 1.06l.932-.932zM14.95 15.7a.75.75 0 001.06-1.06l-.932-.932a.75.75 0 00-1.06 1.06l.932.932zM10 15.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75z" clip-rule="evenodd" /><path d="M7 10a3 3 0 116 0 3 3 0 01-6 0zm3-4a4 4 0 100 8 4 4 0 000-8z" /></svg>
-                        </div>
+                     <div class="flex-grow flex flex-col items-center justify-center text-center p-4 bg-amber-50 rounded-lg">
+                        <span class="text-6xl text-amber-500">🏆</span>
                         <p class="text-3xl font-bold text-slate-800 mt-4">VÔ ĐỊCH</p>
-                        <p class="text-lg text-slate-500">Đánh bại Inter 3-2</p>
+                        <p class="text-lg text-slate-600">Đánh bại Inter Milan 3-2</p>
                     </div>
                 </div>
             </div>
@@ -173,7 +200,7 @@
 
         <section id="off-pitch" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900">Tài Chính & Hậu Trường</h2>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">💼</span>Tài Chính & Hậu Trường</h2>
                 <p class="mt-2 text-lg text-slate-600">Những biến động trên sân cỏ song hành cùng các vấn đề về tài chính và mối quan hệ căng thẳng với người hâm mộ. Khám phá những động lực ngoài sân cỏ định hình mùa giải của Milan.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -213,24 +240,50 @@
              <div class="bg-white p-6 rounded-xl shadow-md">
                 <h3 class="text-2xl font-bold mb-4">Ban Huấn Luyện: Chiếc Ghế Nóng</h3>
                  <p class="text-slate-600 mb-6">Sự bất ổn ở vị trí HLV là một trong những nguyên nhân chính dẫn đến thành tích kém cỏi. Việc thay tướng giữa dòng và công bố HLV mới cho mùa sau ngay lập tức cho thấy sự thiếu kiên nhẫn và tầm nhìn dài hạn.</p>
-                <div class="relative flex items-center justify-between w-full text-center">
-                    <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 transform -translate-y-1/2"></div>
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center border-4 border-white"><div class="text-center"><b class="block">Paulo Fonseca</b><span class="text-xs">Đầu mùa</span></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
+                    <div>
+                        <img src="https://placehold.co/100x100/EEEEEE/333333?text=Fonseca" alt="Paulo Fonseca" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
+                        <b class="block">Paulo Fonseca</b>
+                        <span class="text-xs text-slate-600">Đầu mùa giải - 29/12/2024</span>
                     </div>
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center border-4 border-white"><div class="text-center"><b class="block">Sérgio Conceição</b><span class="text-xs">30/12/2024</span></div></div>
+                    <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
+                    <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
+                    <div>
+                        <img src="https://placehold.co/100x100/EEEEEE/333333?text=Conceição" alt="Sérgio Conceição" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
+                        <b class="block">Sérgio Conceição</b>
+                        <span class="text-xs text-slate-600">30/12/2024 - Cuối mùa giải</span>
                     </div>
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-red-600 text-white rounded-full flex items-center justify-center border-4 border-white"><div class="text-center"><b class="block">M. Allegri</b><span class="text-xs">Mùa 2025/26</span></div></div>
+                    <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
+                     <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
+                    <div>
+                        <img src="https://placehold.co/100x100/E53935/FFFFFF?text=Allegri" alt="Massimiliano Allegri" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 border-red-600">
+                        <b class="block">Massimiliano Allegri</b>
+                        <span class="text-xs text-slate-600">Bổ nhiệm cho mùa 2025/26</span>
                     </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4">Thành Phần Ban Lãnh Đạo (Tính đến 02/06/2025)</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chức Vụ/Vai Trò</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liên Kết</th>
+                            </tr>
+                        </thead>
+                        <tbody id="management-table-body" class="bg-white divide-y divide-gray-200">
+                            
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
         <section id="squad" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900">Phân Tích Đội Hình</h2>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">👥</span>Phân Tích Đội Hình</h2>
                 <p class="mt-2 text-lg text-slate-600">Khám phá chi tiết từng cầu thủ trong đội hình AC Milan mùa giải 2024-2025. Sử dụng bộ lọc để xem theo vị trí và sắp xếp theo các chỉ số khác nhau. Nhấp vào một cầu thủ để xem phân tích sâu hơn.</p>
             </div>
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md">
@@ -284,22 +337,40 @@
     <script>
         const AppData = {
             squad: [
-                { id: 1, name: 'Mike Maignan', position: 'GK', age: 29, appearances: 53, goals: 0, assists: 0, value: 25.0, stats: {cleanSheets: 15}, valueHistory: [45, 40, 35, 25] },
-                { id: 2, name: 'Théo Hernandez', position: 'DF', age: 27, appearances: 49, goals: 5, assists: 4, value: 40.0, stats: {tackles: 60, interceptions: 35, xA: 5.34}, valueHistory: [50, 60, 55, 40] },
-                { id: 3, name: 'Fikayo Tomori', position: 'DF', age: 27, appearances: 36, goals: 0, assists: 2, value: 20.0, stats: {tackles: 55, interceptions: 45, xA: 0.43}, valueHistory: [45, 50, 40, 20] },
-                { id: 4, name: 'Tijjani Reijnders', position: 'MF', age: 26, appearances: 54, goals: 15, assists: 6, value: 50.0, stats: {goals: 15, assists: 6, xG: 7.5, xA: 5.0, keyPasses: 117}, valueHistory: [22, 30, 40, 50] },
-                { id: 5, name: 'Christian Pulisic', position: 'FW', age: 26, appearances: 50, goals: 17, assists: 11, value: 50.0, stats: {goals: 17, assists: 11, xG: 12.0, xA: 6.4, keyPasses: 60}, valueHistory: [40, 38, 42, 50] },
-                { id: 6, name: 'Rafael Leão', position: 'FW', age: 25, appearances: 49, goals: 12, assists: 9, value: 75.0, stats: {goals: 12, assists: 9, xG: 7.6, xA: 8.4, keyPasses: 70}, valueHistory: [70, 85, 80, 75] },
-                { id: 7, name: 'Ruben Loftus-Cheek', position: 'MF', age: 29, appearances: 28, goals: 0, assists: 0, value: 16.0, stats: {goals: 0, assists: 0, xG: 0.7, xA: 1.9, keyPasses: 20}, valueHistory: [25, 20, 18, 16] },
-                { id: 8, name: 'Youssouf Fofana', position: 'MF', age: 25, appearances: 52, goals: 1, assists: 8, value: 30.0, stats: {goals: 1, assists: 8, xG: 1.5, xA: 4.0, keyPasses: 45}, valueHistory: [25, 28, 30, 30] },
-                { id: 9, name: 'Santiago Giménez', position: 'FW', age: 24, appearances: 19, goals: 6, assists: 3, value: 37.0, stats: {goals: 6, assists: 3, xG: 4.8, xA: 0.9, keyPasses: 15}, valueHistory: [25, 40, 45, 37] },
-                { id: 10, name: 'Malick Thiaw', position: 'DF', age: 23, appearances: 31, goals: 1, assists: 0, value: 20.0, stats: {tackles: 40, interceptions: 30, xA: 0.2}, valueHistory: [20, 30, 25, 20] },
-                { id: 11, name: 'Samuel Chukwueze', position: 'FW', age: 26, appearances: 36, goals: 5, assists: 0, value: 14.0, stats: {goals: 5, assists: 0, xG: 4.5, xA: 1.5, keyPasses: 25}, valueHistory: [25, 20, 18, 14] },
-                { id: 12, name: 'Tammy Abraham', position: 'FW', age: 27, appearances: 44, goals: 10, assists: 0, value: 15.0, stats: {goals: 10, assists: 0, xG: 12.5, xA: 2.1, keyPasses: 20}, valueHistory: [40, 35, 25, 15] },
+                { id: 1, name: 'Mike Maignan', position: 'GK', age: 29, appearances: 53, goals: 0, assists: 0, value: 25.0, nationality: 'Pháp', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Maignan', stats: {cleanSheets: 15, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 2, name: 'Marco Sportiello', position: 'GK', age: 33, appearances: 3, goals: 0, assists: 0, value: 0.5, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Sportiello', stats: {cleanSheets: 0, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 3, name: 'Lorenzo Torriani', position: 'GK', age: 20, appearances: 2, goals: 0, assists: 0, value: 0.1, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Torriani', stats: {cleanSheets: 0, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 4, name: 'Théo Hernandez', position: 'DF', age: 27, appearances: 49, goals: 5, assists: 4, value: 40.0, nationality: 'Pháp', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Theo+H.', stats: {goals: 5, assists: 4, xG:3.17, xA:5.34, keyPasses:0, tackles:60, interceptions:35} },
+                { id: 5, name: 'Álex Jiménez', position: 'DF', age: 20, appearances: 28, goals: 0, assists: 2, value: 10.0, nationality: 'Tây Ban Nha', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Jimenez', stats: {goals: 0, assists: 2, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 6, name: 'Emerson Royal', position: 'DF', age: 26, appearances: 26, goals: 0, assists: 0, value: 10.0, nationality: 'Brazil', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Emerson', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 7, name: 'Fikayo Tomori', position: 'DF', age: 27, appearances: 36, goals: 0, assists: 2, value: 20.0, nationality: 'Anh', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Tomori', stats: {goals: 0, assists: 2, xG:0.1, xA:0.43, keyPasses:0, tackles:55, interceptions:45} },
+                { id: 8, name: 'Alessandro Florenzi', position: 'DF', age: 34, appearances: 1, goals: 0, assists: 0, value: 1.0, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Florenzi', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 9, name: 'Malick Thiaw', position: 'DF', age: 23, appearances: 31, goals: 1, assists: 0, value: 20.0, nationality: 'Đức', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Thiaw', stats: {goals: 1, assists: 0, xG:0, xA:0.2, keyPasses:0, tackles:40, interceptions:30} },
+                { id: 10, name: 'Strahinja Pavlović', position: 'DF', age: 24, appearances: 35, goals: 2, assists: 0, value: 18.0, nationality: 'Serbia', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Pavlovic', stats: {goals: 2, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 11, name: 'Kyle Walker', position: 'DF', age: 35, appearances: 16, goals: 0, assists: 0, value: 5.0, nationality: 'Anh', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Walker', note: 'Cho mượn (Man City)', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 12, name: 'Davide Bartesaghi', position: 'DF', age: 19, appearances: 7, goals: 0, assists: 0, value: 1.5, nationality: 'Ý', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Bartesaghi', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 13, name: 'Filippo Terracciano', position: 'DF', age: 22, appearances: 17, goals: 0, assists: 0, value: 7.0, nationality: 'Ý', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Terracciano', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 14, name: 'Matteo Gabbia', position: 'DF', age: 25, appearances: 36, goals: 2, assists: 0, value: 8.0, nationality: 'Ý', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Gabbia', stats: {goals: 2, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 15, name: 'Ruben Loftus-Cheek', position: 'MF', age: 29, appearances: 28, goals: 0, assists: 0, value: 16.0, nationality: 'Anh', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Loftus-C', stats: {goals: 0, assists: 0, xG:0.7, xA:1.9, keyPasses:20, tackles:0, interceptions:0} },
+                { id: 16, name: 'Tijjani Reijnders', position: 'MF', age: 26, appearances: 54, goals: 15, assists: 6, value: 50.0, nationality: 'Hà Lan', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Reijnders', stats: {goals: 15, assists: 6, xG:7.5, xA:5.0, keyPasses:117, tackles:0, interceptions:0} },
+                { id: 17, name: 'Youssouf Fofana', position: 'MF', age: 25, appearances: 52, goals: 1, assists: 8, value: 30.0, nationality: 'Pháp', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Fofana', stats: {goals: 1, assists: 8, xG:1.5, xA:4.0, keyPasses:45, tackles:0, interceptions:0} },
+                { id: 18, name: 'Mattia Liberali', position: 'MF', age: 18, appearances: 1, goals: 0, assists: 0, value: 0.5, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Liberali', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 19, name: 'Warren Bondo', position: 'MF', age: 21, appearances: 5, goals: 0, assists: 0, value: 10.0, nationality: 'Pháp', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Bondo', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 20, name: 'Yunus Musah', position: 'MF', age: 22, appearances: 40, goals: 0, assists: 0, value: 22.0, nationality: 'Mỹ', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Musah', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 21, name: 'Santiago Giménez', position: 'FW', age: 24, appearances: 19, goals: 6, assists: 3, value: 37.0, nationality: 'Mexico', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Gimenez', stats: {goals: 6, assists: 3, xG:4.8, xA:0.9, keyPasses:15, tackles:0, interceptions:0} },
+                { id: 22, name: 'Luka Jović', position: 'FW', age: 27, appearances: 17, goals: 4, assists: 0, value: 2.5, nationality: 'Serbia', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Jovic', stats: {goals: 4, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 23, name: 'Rafael Leão', position: 'FW', age: 26, appearances: 49, goals: 12, assists: 9, value: 75.0, nationality: 'Bồ Đào Nha', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Leao', stats: {goals: 12, assists: 9, xG:7.6, xA:8.4, keyPasses:70, tackles:0, interceptions:0} },
+                { id: 24, name: 'Christian Pulisic', position: 'FW', age: 26, appearances: 50, goals: 17, assists: 11, value: 50.0, nationality: 'Mỹ', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Pulisic', stats: {goals: 17, assists: 11, xG:12.0, xA:6.4, keyPasses:60, tackles:0, interceptions:0} },
+                { id: 25, name: 'Samuel Chukwueze', position: 'FW', age: 26, appearances: 36, goals: 5, assists: 0, value: 14.0, nationality: 'Nigeria', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Chukwueze', stats: {goals: 5, assists: 0, xG:4.5, xA:1.5, keyPasses:25, tackles:0, interceptions:0} },
+                { id: 26, name: 'Francesco Camarda', position: 'FW', age: 17, appearances: 14, goals: 0, assists: 0, value: 10.0, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Camarda', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 27, name: 'Bob Murphy Omoregbe', position: 'FW', age: 21, appearances: 1, goals: 0, assists: 0, value: 0.2, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Omoregbe', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 28, name: 'João Félix', position: 'FW', age: 25, appearances: 21, goals: 3, assists: 0, value: 25.0, nationality: 'Bồ Đào Nha', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Felix', note: 'Cho mượn (Chelsea)', stats: {goals: 3, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { id: 29, name: 'Tammy Abraham', position: 'FW', age: 27, appearances: 44, goals: 10, assists: 0, value: 15.0, nationality: 'Anh', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Abraham', note: 'Cho mượn (Roma)', stats: {goals: 10, assists: 0, xG:12.5, xA:2.1, keyPasses:20, tackles:0, interceptions:0} },
+                { id: 30, name: 'Riccardo Sottil', position: 'FW', age: 26, appearances: 8, goals: 0, assists: 0, value: 4.0, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Sottil', note: 'Cho mượn (Fiorentina)', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
             ],
             performance: {
                 serieA: {
-                    labels: ['Top 4 Target', 'AC Milan', 'Atalanta', 'Bologna'],
+                    labels: ['Mục tiêu Top 4', 'AC Milan', 'Atalanta (Thứ 7)', 'Bologna (Thứ 6)'],
                     points: [71, 63, 69, 68]
                 }
             },
@@ -308,14 +379,33 @@
                     labels: ['Thương mại (44%)', 'Bản quyền TH (38%)', 'Ngày thi đấu (18%)'],
                     data: [174.9, 151.1, 71.6]
                 }
-            }
+            },
+            management: [
+                { name: 'Paolo Scaroni', role: 'Chủ tịch', affiliation: 'AC Milan' },
+                { name: 'Giorgio Furlani', role: 'Giám đốc Điều hành (CEO)', affiliation: 'AC Milan (trước đây thuộc quỹ Elliott)' },
+                { name: 'Gerry Cardinale', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
+                { name: 'Randy Levine', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
+                { name: 'Mark Dowley', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
+                { name: 'Robert Klein', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
+                { name: 'David Castelblanco', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
+                { name: 'Gordon Singer', role: 'Thành viên HĐQT', affiliation: 'Elliott Management' },
+                { name: 'Dominic Mitchell', role: 'Thành viên HĐQT', affiliation: 'Elliott Management' },
+                { name: 'Stefano Cocirio', role: 'Thành viên HĐQT/Giám đốc Tài chính (CFO)', affiliation: 'AC Milan (trước đây thuộc quỹ Elliott)' },
+                { name: 'Alfredo Craca', role: 'Thành viên HĐQT', affiliation: 'AC Milan' },
+                { name: 'Riccardo Stefanelli', role: 'Thành viên HĐQT (Độc lập)', affiliation: 'Bổ nhiệm bởi RedBird' },
+                { name: 'Franco Baresi', role: 'Phó Chủ tịch Danh dự', affiliation: 'AC Milan' },
+                { name: 'Geoffrey Moncada', role: 'Giám đốc Kỹ thuật', affiliation: 'AC Milan' },
+                { name: 'Maikel Oettle', role: 'Giám đốc Thương mại', affiliation: 'AC Milan' },
+                { name: 'Francesca Montini', role: 'Giám đốc Thương hiệu', affiliation: 'AC Milan' }
+            ]
         };
 
         let currentSort = { column: 'name', direction: 'asc' };
         let charts = {};
 
         function formatValue(value) {
-            return value.toFixed(1);
+            if (typeof value === 'number') return value.toFixed(1);
+            return 'N/A';
         }
         
         function renderSquadTable(squadData) {
@@ -329,7 +419,13 @@
                 if (typeof aVal === 'string') {
                     aVal = aVal.toLowerCase();
                     bVal = bVal.toLowerCase();
+                } else if (typeof aVal === 'number' && typeof bVal === 'number') {
+                    // standard number sort
+                } else { // handle cases where one might be undefined or not a number
+                    if (aVal === undefined || aVal === null) return currentSort.direction === 'asc' ? 1 : -1;
+                    if (bVal === undefined || bVal === null) return currentSort.direction === 'asc' ? -1 : 1;
                 }
+
 
                 if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
                 if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
@@ -343,12 +439,11 @@
                 row.innerHTML = `
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         <div class="flex items-center">
-                            <div class="w-2.5 h-2.5 rounded-full mr-2 ${
-                                player.position === 'GK' ? 'bg-yellow-400' :
-                                player.position === 'DF' ? 'bg-blue-500' :
-                                player.position === 'MF' ? 'bg-green-500' : 'bg-red-500'
-                            }"></div>
-                            ${player.name}
+                             <img src="${player.photoUrl || 'https://placehold.co/32x32/DDDDDD/555555?text=P'}" alt="${player.name}" class="w-8 h-8 rounded-full mr-3 object-cover">
+                            <div>
+                                ${player.name}
+                                ${player.note ? `<span class="text-xs text-gray-500 block">${player.note}</span>` : ''}
+                            </div>
                         </div>
                     </td>
                     <td class="px-6 py-4 hidden md:table-cell">${player.age}</td>
@@ -390,30 +485,30 @@
                     <div class="text-center font-semibold text-lg mb-2">Thống kê thủ môn</div>
                     <div class="p-4 bg-slate-100 rounded-lg text-center">
                          <h4 class="font-medium text-slate-500">Số trận giữ sạch lưới</h4>
-                         <p class="text-4xl font-bold text-slate-800 mt-2">${player.stats.cleanSheets}</p>
+                         <p class="text-4xl font-bold text-slate-800 mt-2">${player.stats.cleanSheets !== undefined ? player.stats.cleanSheets : 'N/A'}</p>
                     </div>`;
             }
 
             modalBody.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm">
-                            <h4 class="font-bold text-lg mb-4">Thông tin chung</h4>
-                            <div class="space-y-2 text-sm">
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Vị trí:</strong> ${player.position}</p>
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Tuổi:</strong> ${player.age}</p>
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Số trận:</strong> ${player.appearances}</p>
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Bàn thắng:</strong> ${player.goals}</p>
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Kiến tạo:</strong> ${player.assists}</p>
-                                <p><strong class="font-semibold text-slate-600 w-24 inline-block">Giá trị TT:</strong> €${formatValue(player.value)}M</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 flex flex-col items-center">
+                        <img src="${player.photoUrl || 'https://placehold.co/150x150/DDDDDD/555555?text=Player'}" alt="${player.name}" class="w-40 h-40 rounded-full mb-4 object-cover border-4 border-slate-200">
+                        <div class="bg-white p-4 rounded-lg shadow-sm w-full">
+                            <h4 class="font-bold text-lg mb-2 text-center">Thông tin chung</h4>
+                            <div class="space-y-1 text-sm">
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Vị trí:</strong> ${player.position}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Tuổi:</strong> ${player.age}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Quốc tịch:</strong> ${player.nationality}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Hợp đồng:</strong> ${player.contractUntil}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Số trận:</strong> ${player.appearances}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Bàn thắng:</strong> ${player.goals}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Kiến tạo:</strong> ${player.assists !== undefined ? player.assists : 'N/A'}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Giá trị TT:</strong> €${formatValue(player.value)}M</p>
+                                ${player.note ? `<p><strong class="font-semibold text-slate-600 w-28 inline-block">Ghi chú:</strong> ${player.note}</p>` : ''}
                             </div>
                         </div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm mt-6">
-                             <h4 class="font-bold text-lg mb-2">Lịch sử giá trị chuyển nhượng (€M)</h4>
-                             <div class="chart-container" style="height: 200px; max-height: 30vh;"><canvas id="playerValueChart"></canvas></div>
-                        </div>
                     </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="md:col-span-2 bg-white p-4 rounded-lg shadow-sm">
                          ${statsHtml}
                     </div>
                 </div>
@@ -428,14 +523,14 @@
             
             if (charts.playerRadar) charts.playerRadar.destroy();
             if (charts.playerBar) charts.playerBar.destroy();
-            if (charts.playerValue) charts.playerValue.destroy();
+            
+            const playerStats = player.stats || {};
 
             if (player.position === 'FW' || player.position === 'MF') {
-                initPlayerRadarChart(player);
+                initPlayerRadarChart(player.name, playerStats);
             } else if (player.position === 'DF') {
-                initPlayerBarChart(player);
+                initPlayerBarChart(player.name, playerStats);
             }
-            initPlayerValueChart(player);
         }
 
         function closeModal() {
@@ -489,7 +584,7 @@
                             legend: { display: false },
                             title: { display: true, text: 'So sánh điểm số cuối mùa' }
                         },
-                        scales: { y: { beginAtZero: true } }
+                        scales: { y: { beginAtZero: true, suggestedMax: 80 } }
                     }
                 });
             }
@@ -526,21 +621,23 @@
             }
         }
         
-        function initPlayerRadarChart(player) {
+        function initPlayerRadarChart(playerName, playerStats) {
             const ctx = document.getElementById('playerRadarChart').getContext('2d');
+            const dataValues = [
+                playerStats.goals || 0, 
+                playerStats.assists || 0, 
+                playerStats.xG || 0, 
+                playerStats.xA || 0,
+                (playerStats.keyPasses || 0) > 100 ? (playerStats.keyPasses / 10) : ((playerStats.keyPasses || 0) / 5)
+            ];
+
             charts.playerRadar = new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: ['Bàn thắng', 'Kiến tạo', 'Bàn thắng kỳ vọng (xG)', 'Kiến tạo kỳ vọng (xA)', 'Đường chuyền quyết định'],
+                    labels: ['Bàn thắng', 'Kiến tạo', 'xG', 'xA', 'Ch. Quyết định (scaled)'],
                     datasets: [{
-                        label: player.name,
-                        data: [
-                            player.stats.goals, 
-                            player.stats.assists, 
-                            player.stats.xG, 
-                            player.stats.xA,
-                            player.stats.keyPasses > 100 ? player.stats.keyPasses / 10 : player.stats.keyPasses / 5 
-                        ],
+                        label: playerName,
+                        data: dataValues,
                         fill: true,
                         backgroundColor: 'rgba(239, 68, 68, 0.2)',
                         borderColor: 'rgb(239, 68, 68)',
@@ -554,21 +651,21 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     elements: { line: { tension: 0, borderWidth: 3 } },
-                    scales: { r: { angleLines: { display: false }, suggestMin: 0, ticks: { display: false } } },
+                    scales: { r: { angleLines: { display: true }, suggestMin: 0, ticks: { display: true, backdropPadding:0, stepSize: Math.max(...dataValues) > 10 ? 5 : 2 } } },
                     plugins: { legend: { display: false } }
                 }
             });
         }
 
-        function initPlayerBarChart(player) {
+        function initPlayerBarChart(playerName, playerStats) {
              const ctx = document.getElementById('playerBarChart').getContext('2d');
              charts.playerBar = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Tắc bóng', 'Cắt bóng', 'Kiến tạo kỳ vọng (xA)'],
+                    labels: ['Tắc bóng', 'Cắt bóng', 'xA (scaled)'],
                     datasets: [{
                         label: 'Chỉ số phòng ngự',
-                        data: [player.stats.tackles, player.stats.interceptions, player.stats.xA * 10], // Scaled xA for better visualization
+                        data: [playerStats.tackles || 0, playerStats.interceptions || 0, (playerStats.xA || 0) * 10],
                         backgroundColor: 'rgba(59, 130, 246, 0.5)',
                         borderColor: 'rgb(59, 130, 246)',
                         borderWidth: 1
@@ -584,29 +681,20 @@
             });
         }
         
-        function initPlayerValueChart(player) {
-            const ctx = document.getElementById('playerValueChart').getContext('2d');
-            charts.playerValue = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['2022', '2023', '2024', '2025'],
-                    datasets: [{
-                        label: 'Giá trị thị trường',
-                        data: player.valueHistory,
-                        fill: false,
-                        borderColor: 'rgb(34, 197, 94)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: false } }
-                }
+        function renderManagementTable() {
+            const tableBody = document.getElementById('management-table-body');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            AppData.management.forEach(member => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${member.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${member.role}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${member.affiliation}</td>
+                `;
+                tableBody.appendChild(row);
             });
         }
-
 
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -631,11 +719,14 @@
                 });
                 
                 if (targetId === 'performance' || targetId === 'off-pitch') {
-                   initCharts(); // Initialize charts only when these tabs are active
+                   initCharts(); 
+                }
+                if (targetId === 'off-pitch') {
+                    renderManagementTable();
                 }
                 
-                mobileNav.value = targetId; // Sync mobile nav
-                window.scrollTo(0, 0); // Scroll to top
+                mobileNav.value = targetId; 
+                window.scrollTo(0, 0); 
             }
             
             navLinks.forEach(link => {
@@ -688,7 +779,6 @@
                         currentSort.column = column;
                         currentSort.direction = 'asc';
                     }
-                    // Re-filter and render
                     const position = document.getElementById('position-filter').value;
                     const nameQuery = document.getElementById('name-search').value.toLowerCase();
                     let filteredData = AppData.squad;
@@ -704,16 +794,14 @@
 
             document.getElementById('close-modal-btn').addEventListener('click', closeModal);
             document.getElementById('player-modal').addEventListener('click', (e) => {
-                // Close if clicked on backdrop
                 if(e.target === e.currentTarget) {
                     closeModal();
                 }
             });
 
-            // Initial setup
-            switchTab('overview'); // Default to overview tab
-            renderSquadTable(AppData.squad); // Render initial squad table
-            if (navLinks.length > 0) navLinks[0].classList.add('active'); // Set first nav link active
+            switchTab('overview'); 
+            renderSquadTable(AppData.squad); 
+            if (navLinks.length > 0) navLinks[0].classList.add('active'); 
         });
     </script>
 </body>
