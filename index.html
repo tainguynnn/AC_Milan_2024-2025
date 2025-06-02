@@ -10,17 +10,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Visualization & Content Choices: 
-        - Revenue/Sponsorship Breakdown: Goal: Show proportions. Method: Donut Chart (Chart.js). Interaction: Hover. Justification: Clear for part-to-whole analysis.
-        - Performance Overview: Goal: Compare. Method: Custom HTML/Tailwind trophy case. Interaction: Static visual. Justification: Provides a quick, impactful summary of the season's contrasting results.
-        - Squad Data: Goal: Organize & Compare. Method: Filterable/Sortable HTML Table (JS). Interaction: Filter, Sort, Click for detail. Justification: The most effective method for exploring and comparing a large roster of players.
-        - Detailed Player Stats: Goal: Organize & Compare metrics for one player. Method: Radar Chart (Chart.js). Interaction: Hover. Justification: Excellent for multivariate comparison on a single entity.
-        - Coaching Timeline: Goal: Show change. Method: HTML/Tailwind diagram. Interaction: Static visual. Justification: Clearly illustrates instability.
-        All visualizations are rendered on Canvas via Chart.js, with textual content presented in styled cards for context. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            /* AC Milan Theme: Dark background */
+            background-color: #121212; /* Very dark gray, almost black */
+            color: #E0E0E0; /* Light gray for general text */
         }
 
         .chart-container {
@@ -43,14 +39,20 @@
             transition: color 0.3s, border-color 0.3s;
         }
 
+        /* AC Milan Theme: Active nav link */
         .nav-link.active {
-            color: #E53935;
-            border-bottom-color: #E53935;
+            color: #E53935; /* AC Milan Red */
+            border-bottom-color: #E53935; /* AC Milan Red */
         }
 
         .nav-link:not(.active) {
             border-bottom-color: transparent;
         }
+        
+        .nav-link:not(.active):hover {
+            color: #F44336; /* Lighter red on hover */
+        }
+
 
         .modal-backdrop {
             transition: opacity 0.3s ease-in-out;
@@ -63,18 +65,18 @@
         .table-header-sortable {
             cursor: pointer;
         }
-
+        /* AC Milan Theme: Table header hover */
         .table-header-sortable:hover {
-            background-color: #f0f0f0;
+            background-color: #333333; /* Darker gray for hover */
         }
 
         .table-row-clickable {
             cursor: pointer;
             transition: background-color 0.2s;
         }
-
+        /* AC Milan Theme: Table row hover */
         .table-row-clickable:hover {
-            background-color: #fcebeb;
+            background-color: #2a2a2a; /* Slightly lighter dark gray for hover */
         }
 
         .tournament-logo {
@@ -85,7 +87,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: white;
+            color: white; /* Text color on logos, ensure contrast */
             margin-right: 8px;
         }
 
@@ -93,32 +95,27 @@
             background-color: #0055A4;
         }
 
-        /* Blue for Serie A */
         .champions-league-logo {
             background-color: #001E5A;
         }
 
-        /* Dark blue for UCL */
         .coppa-italia-logo {
             background-color: #009246;
         }
 
-        /* Green for Coppa Italia */
         .supercoppa-logo {
-            background-color: #CEB888;
+            background-color: #CEB888; /* Gold, keep for contrast */
         }
-
-        /* Gold for Supercoppa */
 
         .timeline {
             list-style-type: none;
             padding-left: 0;
             position: relative;
         }
-
+        /* AC Milan Theme: Timeline line */
         .timeline:before {
             content: '';
-            background: #d4d9df;
+            background: #444444; /* Darker gray for timeline line */
             display: inline-block;
             position: absolute;
             left: 10px;
@@ -132,11 +129,11 @@
             padding-left: 40px;
             position: relative;
         }
-
+        /* AC Milan Theme: Timeline item dot */
         .timeline-item:before {
             content: '';
-            background: white;
-            border: 2px solid #E53935;
+            background: #121212; /* Match body background */
+            border: 2px solid #E53935; /* AC Milan Red border */
             display: inline-block;
             position: absolute;
             border-radius: 50%;
@@ -144,52 +141,68 @@
             width: 24px;
             height: 24px;
             z-index: 1;
-            text-align: center;
-            line-height: 20px;
-            font-size: 12px;
         }
-
+        /* AC Milan Theme: Timeline item content */
         .timeline-item-content {
-            background-color: #fff;
+            background-color: #1E1E1E; /* Dark surface for content */
             padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
         }
 
         .timeline-item-title {
             font-weight: bold;
             margin-bottom: 5px;
+            color: #E53935; /* AC Milan Red for titles */
         }
+
+        /* Custom classes for AC Milan theme */
+        .acm-bg-dark { background-color: #121212; } /* Main dark background */
+        .acm-bg-surface { background-color: #1E1E1E; } /* Slightly lighter surface */
+        .acm-bg-surface-header { background-color: #242424; } /* Slightly lighter surface for headers */
+        .acm-text-light { color: #E0E0E0; } /* Primary light text */
+        .acm-text-secondary { color: #A0A0A0; } /* Secondary, less prominent text */
+        .acm-text-red { color: #E53935; } /* AC Milan Red text */
+        .acm-border-red { border-color: #E53935; }
+        .acm-border-dark { border-color: #333333; } /* Darker border */
+        .acm-highlight-green { color: #4CAF50; } /* Keep green for positive highlights if needed */
+        .acm-highlight-red-text { color: #F44336; } /* Brighter red for negative highlights */
+
+        /* Adjustments for Tailwind overrides */
+        .placeholder-acm::placeholder {
+            color: #757575; /* Placeholder text color for dark inputs */
+        }
+
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800">
+<body class="acm-bg-dark acm-text-light">
 
-    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+    <header class="acm-bg-surface-header/90 backdrop-blur-lg shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/200px-Logo_of_AC_Milan.svg.png"
                         alt="AC Milan Logo" class="h-8 w-8 rounded-full">
-                    <h1 class="text-lg md:text-xl font-bold text-slate-900">Milan 2024-25</h1>
+                    <h1 class="text-lg md:text-xl font-bold acm-text-light">Milan 2024-25</h1>
                 </div>
                 <div class="hidden md:flex items-center space-x-2 md:space-x-4">
                     <a href="#overview" data-target="overview"
-                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📄
+                        class="nav-link text-sm md:text-base font-medium acm-text-secondary py-2 border-b-2">📄
                         Tổng Quan</a>
                     <a href="#performance" data-target="performance"
-                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📊
+                        class="nav-link text-sm md:text-base font-medium acm-text-secondary py-2 border-b-2">📊
                         Thành Tích</a>
                     <a href="#off-pitch" data-target="off-pitch"
-                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">💼
+                        class="nav-link text-sm md:text-base font-medium acm-text-secondary py-2 border-b-2">💼
                         Tài Chính & Hậu Trường</a>
                     <a href="#squad" data-target="squad"
-                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">👥
+                        class="nav-link text-sm md:text-base font-medium acm-text-secondary py-2 border-b-2">👥
                         Đội Hình</a>
                 </div>
                 <div class="md:hidden">
                     <select id="mobile-nav"
-                        class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
+                        class="acm-bg-surface border acm-border-dark acm-text-light text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 placeholder-acm">
                         <option value="overview">📄 Tổng Quan</option>
                         <option value="performance">📊 Thành Tích</option>
                         <option value="off-pitch">💼 Tài Chính & Hậu Trường</option>
@@ -204,50 +217,50 @@
 
         <section id="overview" class="app-section space-y-8">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📄</span>Mùa
+                <h2 class="text-3xl font-bold acm-text-red flex items-center"><span class="mr-2 text-2xl">📄</span>Mùa
                     Giải Của Những Thái Cực</h2>
-                <p class="mt-2 text-lg text-slate-600">Mùa giải 2024-2025 của AC Milan là một bức tranh phức tạp, nơi
+                <p class="mt-2 text-lg acm-text-secondary">Mùa giải 2024-2025 của AC Milan là một bức tranh phức tạp, nơi
                     vinh quang tại các giải đấu cúp không thể che lấp đi nỗi thất vọng tại Serie A. Báo cáo này phân
                     tích sâu về một năm đầy biến động của Rossoneri, từ sân cỏ đến phòng họp.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500 flex items-center">
+                <div class="acm-bg-surface p-5 rounded-xl shadow-lg">
+                    <h3 class="font-semibold acm-text-secondary flex items-center">
                         <div class="tournament-logo serie-a-logo">SA</div>Vị trí Serie A
                     </h3>
-                    <p class="text-4xl font-bold text-red-700 mt-2">Hạng 8</p>
-                    <p class="text-sm text-slate-500 mt-1">Không đủ điều kiện dự cúp Châu Âu</p>
+                    <p class="text-4xl font-bold acm-highlight-red-text mt-2">Hạng 8</p>
+                    <p class="text-sm acm-text-secondary mt-1">Không đủ điều kiện dự cúp Châu Âu</p>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500 flex items-center">
+                <div class="acm-bg-surface p-5 rounded-xl shadow-lg">
+                    <h3 class="font-semibold acm-text-secondary flex items-center">
                         <div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana
                     </h3>
-                    <p class="text-4xl font-bold text-green-600 mt-2">Vô Địch</p>
-                    <p class="text-sm text-slate-500 mt-1">Đánh bại Inter Milan 3-2</p>
+                    <p class="text-4xl font-bold acm-highlight-green mt-2">Vô Địch</p>
+                    <p class="text-sm acm-text-secondary mt-1">Đánh bại Inter Milan 3-2</p>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500">Vua Phá Lưới (Mọi Đấu Trường)</h3>
-                    <p class="text-4xl font-bold text-slate-800 mt-2">17</p>
-                    <p class="text-sm text-slate-500 mt-1">Christian Pulisic</p>
+                <div class="acm-bg-surface p-5 rounded-xl shadow-lg">
+                    <h3 class="font-semibold acm-text-secondary">Vua Phá Lưới (Mọi Đấu Trường)</h3>
+                    <p class="text-4xl font-bold acm-text-light mt-2">17</p>
+                    <p class="text-sm acm-text-secondary mt-1">Christian Pulisic</p>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500">Giá Trị CLB (Forbes 2025)</h3>
-                    <p class="text-4xl font-bold text-slate-800 mt-2">$1.5 tỷ</p>
-                    <p class="text-sm text-green-600 mt-1">▲ 5% so với năm trước</p>
+                <div class="acm-bg-surface p-5 rounded-xl shadow-lg">
+                    <h3 class="font-semibold acm-text-secondary">Giá Trị CLB (Forbes 2025)</h3>
+                    <p class="text-4xl font-bold acm-text-light mt-2">$1.5 tỷ</p>
+                    <p class="text-sm acm-highlight-green mt-1">▲ 5% so với năm trước</p>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-4">Sự Tương Phản Của Mùa Giải</h3>
-                <p class="mb-6 text-slate-600">Thành công ở các giải đấu cúp một trận và sự bất ổn trong cuộc đua đường
+            <div class="acm-bg-surface p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold acm-text-red mb-4">Sự Tương Phản Của Mùa Giải</h3>
+                <p class="mb-6 acm-text-secondary">Thành công ở các giải đấu cúp một trận và sự bất ổn trong cuộc đua đường
                     dài ở giải VĐQG đã định hình nên một mùa giải khó đoán của Milan. Đội bóng có thể thi đấu thăng hoa
                     trong các trận đấu knock-out nhưng lại thiếu đi sự nhất quán cần thiết để cạnh tranh cho Scudetto,
                     dẫn đến sự hụt hẫng lớn cho người hâm mộ.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="border-l-4 border-green-500 pl-4">
-                        <h4 class="font-bold text-xl text-green-600">Điểm Sáng</h4>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-slate-700">
+                        <h4 class="font-bold text-xl acm-highlight-green">Điểm Sáng</h4>
+                        <ul class="list-disc list-inside mt-2 space-y-1 acm-text-light">
                             <li>Vô địch Supercoppa Italiana lần thứ 8.</li>
                             <li>Lọt vào chung kết Coppa Italia.</li>
                             <li>Christian Pulisic và Tijjani Reijnders tỏa sáng.</li>
@@ -255,9 +268,9 @@
                             <li>Bất bại trước Inter Milan ở các trận derby.</li>
                         </ul>
                     </div>
-                    <div class="border-l-4 border-red-500 pl-4">
-                        <h4 class="font-bold text-xl text-red-600">Nỗi Thất Vọng</h4>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-slate-700">
+                    <div class="border-l-4 acm-border-red pl-4">
+                        <h4 class="font-bold text-xl acm-highlight-red-text">Nỗi Thất Vọng</h4>
+                        <ul class="list-disc list-inside mt-2 space-y-1 acm-text-light">
                             <li>Chỉ kết thúc ở vị trí thứ 8 tại Serie A.</li>
                             <li>Bị loại sớm khỏi Champions League.</li>
                             <li>Thua chung kết Coppa Italia trước Bologna.</li>
@@ -271,83 +284,83 @@
 
         <section id="performance" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span
+                <h2 class="text-3xl font-bold acm-text-red flex items-center"><span
                         class="mr-2 text-2xl">📊</span>Phân Tích Thành Tích</h2>
-                <p class="mt-2 text-lg text-slate-600">Khám phá hành trình của AC Milan qua bốn đấu trường chính trong
+                <p class="mt-2 text-lg acm-text-secondary">Khám phá hành trình của AC Milan qua bốn đấu trường chính trong
                     mùa giải 2024-2025: từ vinh quang cúp quốc nội đến sự sa sút ở giải VĐQG và đấu trường châu Âu.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-1 flex items-center">
+                <div class="acm-bg-surface p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold acm-text-red mb-1 flex items-center">
                         <div class="tournament-logo serie-a-logo">SA</div>Serie A: Mùa Giải Đầy Thử Thách
                     </h3>
-                    <p class="text-slate-600 mb-4">Kết thúc ở vị trí thứ 8 với 63 điểm là một kết quả đáng thất vọng,
+                    <p class="acm-text-secondary mb-4">Kết thúc ở vị trí thứ 8 với 63 điểm là một kết quả đáng thất vọng,
                         cho thấy sự thiếu ổn định nghiêm trọng trong suốt 38 vòng đấu.</p>
                     <div class="chart-container">
                         <canvas id="serieAChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                <div class="acm-bg-surface p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold acm-text-red mb-4 flex items-center">
                         <div class="tournament-logo champions-league-logo">CL</div>Champions League: Dừng Bước Sớm
                     </h3>
-                    <p class="text-slate-600 mb-4">Dù đã vượt qua vòng bảng, Milan đã bị Feyenoord loại ở vòng play-off,
+                    <p class="acm-text-secondary mb-4">Dù đã vượt qua vòng bảng, Milan đã bị Feyenoord loại ở vòng play-off,
                         một kết quả dưới kỳ vọng cho một CLB giàu truyền thống châu Âu.</p>
                     <div class="flex flex-col space-y-4">
-                        <div class="text-center p-4 bg-slate-100 rounded-lg">
-                            <p class="font-semibold text-slate-500">Giai đoạn</p>
-                            <p class="text-xl font-bold text-slate-800">Vòng Play-off Đấu loại trực tiếp</p>
+                        <div class="text-center p-4 bg-gray-800 rounded-lg">
+                            <p class="font-semibold text-gray-400">Giai đoạn</p>
+                            <p class="text-xl font-bold acm-text-light">Vòng Play-off Đấu loại trực tiếp</p>
                         </div>
-                        <div class="text-center p-4 bg-red-50 rounded-lg">
-                            <p class="font-semibold text-red-500">Kết quả</p>
-                            <p class="text-xl font-bold text-red-800">Bị loại bởi Feyenoord (Tổng tỷ số 1-2)</p>
+                        <div class="text-center p-4 bg-red-900/30 rounded-lg">
+                            <p class="font-semibold acm-text-red">Kết quả</p>
+                            <p class="text-xl font-bold text-red-400">Bị loại bởi Feyenoord (Tổng tỷ số 1-2)</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                <div class="acm-bg-surface p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold acm-text-red mb-4 flex items-center">
                         <div class="tournament-logo coppa-italia-logo">CI</div>Coppa Italia: Hành Trình Đến Chung Kết
                     </h3>
-                    <p class="text-slate-600 mb-4">Milan đã thể hiện bản lĩnh ở các trận đấu loại trực tiếp, vượt qua
+                    <p class="acm-text-secondary mb-4">Milan đã thể hiện bản lĩnh ở các trận đấu loại trực tiếp, vượt qua
                         các đối thủ mạnh để vào chung kết, nhưng lại gục ngã ở ngưỡng cửa thiên đường.</p>
                     <ul class="timeline">
-                        <li class="timeline-item">
+                         <li class="timeline-item">
                             <div class="timeline-item-content">
                                 <h4 class="timeline-item-title">Vòng 16 đội</h4>
-                                <p>vs Sassuolo <strong class="text-green-600">(Thắng 6-1)</strong></p>
+                                <p class="acm-text-light">vs Sassuolo <strong class="acm-highlight-green">(Thắng 6-1)</strong></p>
                             </div>
                         </li>
                         <li class="timeline-item">
                             <div class="timeline-item-content">
                                 <h4 class="timeline-item-title">Tứ kết</h4>
-                                <p>vs AS Roma <strong class="text-green-600">(Thắng 3-1)</strong></p>
+                                <p class="acm-text-light">vs AS Roma <strong class="acm-highlight-green">(Thắng 3-1)</strong></p>
                             </div>
                         </li>
                         <li class="timeline-item">
                             <div class="timeline-item-content">
                                 <h4 class="timeline-item-title">Bán kết</h4>
-                                <p>vs Inter Milan <strong class="text-green-600">(Thắng chung cuộc 4-1)</strong></p>
+                                <p class="acm-text-light">vs Inter Milan <strong class="acm-highlight-green">(Thắng chung cuộc 4-1)</strong></p>
                             </div>
                         </li>
                         <li class="timeline-item">
                             <div class="timeline-item-content">
                                 <h4 class="timeline-item-title">Chung kết</h4>
-                                <p>vs Bologna <strong class="text-red-600">(Thua 0-1)</strong></p>
+                                <p class="acm-text-light">vs Bologna <strong class="acm-highlight-red-text">(Thua 0-1)</strong></p>
                             </div>
                         </li>
                     </ul>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                <div class="acm-bg-surface p-6 rounded-xl shadow-lg flex flex-col">
+                    <h3 class="text-2xl font-bold acm-text-red mb-4 flex items-center">
                         <div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana: Tia Sáng An Ủi
                     </h3>
-                    <p class="text-slate-600 mb-4">Chiến thắng thuyết phục trước đại kình địch Inter Milan đã mang về
+                    <p class="acm-text-secondary mb-4">Chiến thắng thuyết phục trước đại kình địch Inter Milan đã mang về
                         danh hiệu duy nhất của mùa giải, một niềm vui hiếm hoi cho các Milanista.</p>
                     <div
-                        class="flex-grow flex flex-col items-center justify-center text-center p-4 bg-amber-50 rounded-lg">
-                        <span class="text-6xl text-amber-500">🏆</span>
-                        <p class="text-3xl font-bold text-slate-800 mt-4">VÔ ĐỊCH</p>
-                        <p class="text-lg text-slate-600">Đánh bại Inter Milan 3-2</p>
+                        class="flex-grow flex flex-col items-center justify-center text-center p-4 bg-red-600/10 rounded-lg">
+                        <span class="text-6xl" style="color: #CEB888;">🏆</span>
+                        <p class="text-3xl font-bold acm-text-light mt-4">VÔ ĐỊCH</p>
+                        <p class="text-lg acm-text-secondary">Đánh bại Inter Milan 3-2</p>
                     </div>
                 </div>
             </div>
@@ -355,42 +368,42 @@
 
         <section id="off-pitch" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">💼</span>Tài
+                <h2 class="text-3xl font-bold acm-text-red flex items-center"><span class="mr-2 text-2xl">💼</span>Tài
                     Chính & Hậu Trường</h2>
-                <p class="mt-2 text-lg text-slate-600">Những biến động trên sân cỏ song hành cùng các vấn đề về tài
+                <p class="mt-2 text-lg acm-text-secondary">Những biến động trên sân cỏ song hành cùng các vấn đề về tài
                     chính và mối quan hệ căng thẳng với người hâm mộ. Khám phá những động lực ngoài sân cỏ định hình mùa
                     giải của Milan.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-1">Sức Khỏe Kinh Tế</h3>
-                    <p class="text-slate-600 mb-4">Dù giá trị CLB tăng, việc không được dự cúp Châu Âu mùa tới sẽ tạo ra
+                <div class="lg:col-span-3 acm-bg-surface p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold acm-text-red mb-1">Sức Khỏe Kinh Tế</h3>
+                    <p class="acm-text-secondary mb-4">Dù giá trị CLB tăng, việc không được dự cúp Châu Âu mùa tới sẽ tạo ra
                         áp lực tài chính lớn, dự kiến gây thâm hụt đáng kể.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="p-4 bg-slate-100 rounded-lg">
-                            <h4 class="font-medium text-slate-500">Doanh thu 2023-24</h4>
-                            <p class="text-2xl font-bold text-slate-800">€397.6M</p>
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h4 class="font-medium text-gray-400">Doanh thu 2023-24</h4>
+                            <p class="text-2xl font-bold acm-text-light">€397.6M</p>
                         </div>
-                        <div class="p-4 bg-red-50 rounded-lg">
-                            <h4 class="font-medium text-red-500">Lỗ dự kiến 24-25</h4>
-                            <p class="text-2xl font-bold text-red-700">~ €25M</p>
+                        <div class="p-4 bg-red-900/30 rounded-lg">
+                            <h4 class="font-medium text-red-400">Lỗ dự kiến 24-25</h4>
+                            <p class="text-2xl font-bold text-red-300">~ €25M</p>
                         </div>
                     </div>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
-                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-1">Mối Quan Hệ với Người Hâm Mộ</h3>
-                    <p class="text-slate-600 mb-4">Sự bất mãn lên đến đỉnh điểm với các cuộc biểu tình của Curva Sud
+                <div class="lg:col-span-2 acm-bg-surface p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold acm-text-red mb-1">Mối Quan Hệ với Người Hâm Mộ</h3>
+                    <p class="acm-text-secondary mb-4">Sự bất mãn lên đến đỉnh điểm với các cuộc biểu tình của Curva Sud
                         nhắm vào chủ sở hữu RedBird, phản ánh sự mất kết nối giữa CĐV và ban lãnh đạo.</p>
-                    <blockquote class="border-l-4 border-black pl-4 py-2 bg-gray-100">
-                        <p class="text-xl font-semibold italic text-slate-800">"Go Home"</p>
-                        <footer class="text-slate-600 mt-2">— Thông điệp từ các Ultras trong trận đấu cuối cùng của mùa
+                    <blockquote class="border-l-4 acm-border-red pl-4 py-2 bg-gray-800/50">
+                        <p class="text-xl font-semibold italic acm-text-light">"Go Home"</p>
+                        <footer class="acm-text-secondary mt-2">— Thông điệp từ các Ultras trong trận đấu cuối cùng của mùa
                             giải.</footer>
                     </blockquote>
-                    <h4 class="font-semibold mt-6 mb-2">Các bất bình chính:</h4>
-                    <ul class="list-disc list-inside space-y-1 text-slate-700">
+                    <h4 class="font-semibold mt-6 mb-2 acm-text-red">Các bất bình chính:</h4>
+                    <ul class="list-disc list-inside space-y-1 acm-text-light">
                         <li>Thành tích mùa giải đáng thất vọng.</li>
                         <li>Thiếu đầu tư và tham vọng rõ ràng từ chủ sở hữu.</li>
                         <li>Sa thải huyền thoại Paolo Maldini.</li>
@@ -398,110 +411,109 @@
                     </ul>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-md mt-8">
-                <h3 class="text-2xl font-bold mb-4">Hoạt Động Chuyển Nhượng Mùa Giải 2024-2025</h3>
-                <p class="text-sm text-slate-500 mb-4">Lưu ý: Dữ liệu chuyển nhượng dưới đây mang tính tổng hợp và minh
+            <div class="acm-bg-surface p-6 rounded-xl shadow-lg mt-8">
+                <h3 class="text-2xl font-bold acm-text-red mb-4">Hoạt Động Chuyển Nhượng Mùa Giải 2024-2025</h3>
+                <p class="text-sm acm-text-secondary mb-4">Lưu ý: Dữ liệu chuyển nhượng dưới đây mang tính tổng hợp và minh
                     họa dựa trên các thông tin có sẵn, phí chuyển nhượng có thể thay đổi hoặc không được công bố chính
                     thức.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div>
-                        <h4 class="text-xl font-semibold mb-3 text-green-700 border-b-2 border-green-200 pb-2">Cầu Thủ
+                        <h4 class="text-xl font-semibold mb-3 acm-highlight-green border-b-2 border-green-700 pb-2">Cầu Thủ
                             Đến</h4>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-green-50">
+                            <table class="min-w-full divide-y acm-border-dark">
+                                <thead class="bg-gray-800">
                                     <tr>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-400 uppercase tracking-wider">
                                             Tên</th>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider hidden sm:table-cell">
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-400 uppercase tracking-wider hidden sm:table-cell">
                                             Từ CLB</th>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-400 uppercase tracking-wider">
                                             Phí/Loại</th>
                                     </tr>
                                 </thead>
-                                <tbody id="transfers-in-table-body" class="bg-white divide-y divide-gray-200">
+                                <tbody id="transfers-in-table-body" class="divide-y acm-border-dark">
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div>
-                        <h4 class="text-xl font-semibold mb-3 text-red-700 border-b-2 border-red-200 pb-2">Cầu Thủ Đi
+                        <h4 class="text-xl font-semibold mb-3 acm-highlight-red-text border-b-2 border-red-700 pb-2">Cầu Thủ Đi
                         </h4>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-red-50">
+                            <table class="min-w-full divide-y acm-border-dark">
+                                <thead class="bg-gray-800">
                                     <tr>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-400 uppercase tracking-wider">
                                             Tên</th>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider hidden sm:table-cell">
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-400 uppercase tracking-wider hidden sm:table-cell">
                                             Đến CLB</th>
                                         <th scope="col"
-                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-400 uppercase tracking-wider">
                                             Phí/Loại</th>
                                     </tr>
                                 </thead>
-                                <tbody id="transfers-out-table-body" class="bg-white divide-y divide-gray-200">
+                                <tbody id="transfers-out-table-body" class="divide-y acm-border-dark">
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-2xl font-bold mb-4">Ban Huấn Luyện: Chiếc Ghế Nóng</h3>
-                <p class="text-slate-600 mb-6">Sự bất ổn ở vị trí HLV là một trong những nguyên nhân chính dẫn đến thành
+            <div class="acm-bg-surface p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold acm-text-red mb-4">Ban Huấn Luyện: Chiếc Ghế Nóng</h3>
+                <p class="acm-text-secondary mb-6">Sự bất ổn ở vị trí HLV là một trong những nguyên nhân chính dẫn đến thành
                     tích kém cỏi. Việc thay tướng giữa dòng và công bố HLV mới cho mùa sau ngay lập tức cho thấy sự
                     thiếu kiên nhẫn và tầm nhìn dài hạn.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
                     <div>
                         <img src="https://dims.apnews.com/dims4/default/791df99/2147483647/strip/false/crop/4480x2984+0+0/resize/1486x990!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F7b%2Fc1%2F70ee58a14626b62bbf4a54a10b74%2Fb093963152df4ac79da6db41da6bc388"
-                            alt="Paulo Fonseca" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
-                        <b class="block">Paulo Fonseca</b>
-                        <span class="text-xs text-slate-600">Đầu mùa giải - 29/12/2024</span>
+                            alt="Paulo Fonseca" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 acm-border-dark">
+                        <b class="block acm-text-light">Paulo Fonseca</b>
+                        <span class="text-xs acm-text-secondary">Đầu mùa giải - 29/12/2024</span>
                     </div>
-                    <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
-                    <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
+                    <div class="text-2xl acm-text-secondary hidden md:block">&rarr;</div>
+                    <div class="md:hidden text-2xl acm-text-secondary my-2">&darr;</div>
                     <div>
                         <img src="https://icdn.sempremilan.com/wp-content/uploads/2024/12/sergio-conceicao-official-milan.jpg"
-                            alt="Sérgio Conceição" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
-                        <b class="block">Sérgio Conceição</b>
-                        <span class="text-xs text-slate-600">30/12/2024 - Cuối mùa giải</span>
+                            alt="Sérgio Conceição" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 acm-border-dark">
+                        <b class="block acm-text-light">Sérgio Conceição</b>
+                        <span class="text-xs acm-text-secondary">30/12/2024 - Cuối mùa giải</span>
                     </div>
-                    <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
-                    <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
+                    <div class="text-2xl acm-text-secondary hidden md:block">&rarr;</div>
+                    <div class="md:hidden text-2xl acm-text-secondary my-2">&darr;</div>
                     <div>
                         <img src="https://icdn.sempremilan.com/wp-content/uploads/2025/05/GsIXkXbXMAAKUfs.jpeg"
                             alt="Massimiliano Allegri"
-                            class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 border-red-600">
-                        <b class="block">Massimiliano Allegri</b>
-                        <span class="text-xs text-slate-600">Bổ nhiệm cho mùa 2025/26</span>
+                            class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 acm-border-red">
+                        <b class="block acm-text-light">Massimiliano Allegri</b>
+                        <span class="text-xs acm-text-secondary">Bổ nhiệm cho mùa 2025/26</span>
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-md mt-8">
-                <h3 class="text-2xl font-bold mb-4">Thành Phần Ban Lãnh Đạo (Tính đến 02/06/2025)</h3>
+            <div class="acm-bg-surface p-6 rounded-xl shadow-lg mt-8">
+                <h3 class="text-2xl font-bold acm-text-red mb-4">Thành Phần Ban Lãnh Đạo (Tính đến 02/06/2025)</h3>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y acm-border-dark">
+                        <thead class="bg-gray-800">
                             <tr>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium acm-text-secondary uppercase tracking-wider">
                                     Tên</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium acm-text-secondary uppercase tracking-wider">
                                     Chức Vụ/Vai Trò</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium acm-text-secondary uppercase tracking-wider">
                                     Liên Kết</th>
                             </tr>
                         </thead>
-                        <tbody id="management-table-body" class="bg-white divide-y divide-gray-200">
-
+                        <tbody id="management-table-body" class="divide-y acm-border-dark">
                         </tbody>
                     </table>
                 </div>
@@ -511,19 +523,19 @@
 
         <section id="squad" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span
+                <h2 class="text-3xl font-bold acm-text-red flex items-center"><span
                         class="mr-2 text-2xl">👥</span>Phân Tích Đội Hình</h2>
-                <p class="mt-2 text-lg text-slate-600">Khám phá chi tiết từng cầu thủ trong đội hình AC Milan mùa giải
+                <p class="mt-2 text-lg acm-text-secondary">Khám phá chi tiết từng cầu thủ trong đội hình AC Milan mùa giải
                     2024-2025. Sử dụng bộ lọc để xem theo vị trí và sắp xếp theo các chỉ số khác nhau. Nhấp vào một cầu
                     thủ để xem phân tích sâu hơn.</p>
             </div>
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+            <div class="acm-bg-surface p-4 sm:p-6 rounded-xl shadow-lg">
                 <div class="flex flex-col sm:flex-row items-center justify-between mb-4 gap-4">
                     <div class="w-full sm:w-auto">
-                        <label for="position-filter" class="text-sm font-medium text-slate-700 mr-2">Lọc theo vị
+                        <label for="position-filter" class="text-sm font-medium acm-text-light mr-2">Lọc theo vị
                             trí:</label>
                         <select id="position-filter"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2">
+                            class="acm-bg-surface-header border acm-border-dark acm-text-light text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2 placeholder-acm">
                             <option value="all">Tất cả</option>
                             <option value="GK">Thủ môn (GK)</option>
                             <option value="DF">Hậu vệ (DF)</option>
@@ -533,13 +545,13 @@
                     </div>
                     <div class="w-full sm:w-auto">
                         <input type="text" id="name-search" placeholder="Tìm kiếm theo tên..."
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2 w-full">
+                            class="acm-bg-surface-header border acm-border-dark acm-text-light text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2 w-full placeholder-acm">
                     </div>
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-slate-500">
-                        <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                    <table class="w-full text-sm text-left acm-text-secondary">
+                        <thead class="text-xs acm-text-light uppercase bg-gray-800">
                             <tr>
                                 <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="name">Cầu thủ</th>
                                 <th scope="col" class="px-6 py-3 table-header-sortable hidden md:table-cell"
@@ -551,7 +563,7 @@
                                     (€M)</th>
                             </tr>
                         </thead>
-                        <tbody id="squad-table-body">
+                        <tbody id="squad-table-body" class="divide-y acm-border-dark">
                         </tbody>
                     </table>
                 </div>
@@ -561,13 +573,13 @@
     </main>
 
     <div id="player-modal"
-        class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden modal-backdrop">
+        class="fixed inset-0 bg-black bg-opacity-75 z-[100] items-center justify-center hidden modal-backdrop">  
         <div
-            class="bg-slate-50 rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto m-8 modal-content transform scale-95">
-            <div class="sticky top-0 bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center z-10">
-                <h3 id="modal-player-name" class="text-2xl font-bold"></h3>
+            class="acm-bg-surface rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto m-8 modal-content transform scale-95">
+            <div class="sticky top-0 acm-bg-surface-header p-4 border-b acm-border-dark flex justify-between items-center z-10">
+                <h3 id="modal-player-name" class="text-2xl font-bold acm-text-red"></h3>
                 <button id="close-modal-btn"
-                    class="text-slate-500 hover:text-slate-800 text-3xl leading-none">&times;</button>
+                    class="acm-text-secondary hover:acm-text-light text-3xl leading-none">&times;</button>
             </div>
             <div id="modal-body" class="p-6 space-y-6">
             </div>
@@ -623,6 +635,7 @@
             management: [
                 { name: 'Paolo Scaroni', role: 'Chủ tịch', affiliation: 'AC Milan' },
                 { name: 'Giorgio Furlani', role: 'Giám đốc Điều hành (CEO)', affiliation: 'AC Milan (trước đây thuộc quỹ Elliott)' },
+                { name: 'Zlatan Ibrahimović', role: 'Cố vấn Cấp cao cho Ban Lãnh đạo & RedBird', affiliation: 'AC Milan / RedBird Capital Partners'},
                 { name: 'Gerry Cardinale', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
                 { name: 'Randy Levine', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
                 { name: 'Mark Dowley', role: 'Thành viên HĐQT', affiliation: 'RedBird Capital Partners' },
@@ -666,59 +679,64 @@
         };
 
         let currentSort = { column: 'name', direction: 'asc' };
-        let charts = {};
+        let charts = {}; // Object to store chart instances
 
+        // Function to safely format monetary values
         function formatValue(value) {
             if (typeof value === 'number') return value.toFixed(1);
             return 'N/A';
         }
 
+        // Function to render the squad table with current data, filter, and sort
         function renderSquadTable(squadData) {
             const tableBody = document.getElementById('squad-table-body');
-            tableBody.innerHTML = '';
+            if (!tableBody) return; // Ensure table body exists
+            tableBody.innerHTML = ''; // Clear existing rows
 
+            // Sort data based on currentSort state
             const sortedData = [...squadData].sort((a, b) => {
                 let aVal = a[currentSort.column];
                 let bVal = b[currentSort.column];
 
+                // Handle string sorting (case-insensitive)
                 if (typeof aVal === 'string') {
                     aVal = aVal.toLowerCase();
                     bVal = bVal.toLowerCase();
-                } else if (typeof aVal === 'number' && typeof bVal === 'number') {
-                    // standard number sort
-                } else { // handle cases where one might be undefined or not a number
-                    if (aVal === undefined || aVal === null) return currentSort.direction === 'asc' ? 1 : -1;
-                    if (bVal === undefined || bVal === null) return currentSort.direction === 'asc' ? -1 : 1;
+                } else if (aVal === null || aVal === undefined) { // Handle null/undefined values for sorting
+                    return currentSort.direction === 'asc' ? 1 : -1;
+                } else if (bVal === null || bVal === undefined) {
+                    return currentSort.direction === 'asc' ? -1 : 1;
                 }
-
-
+                // Standard comparison
                 if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
                 if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
                 return 0;
             });
 
+            // Create and append table rows
             sortedData.forEach(player => {
                 const row = document.createElement('tr');
-                row.className = 'bg-white border-b table-row-clickable';
+                row.className = 'border-b acm-border-dark table-row-clickable'; // Themed border and clickable class
                 row.dataset.playerId = player.id;
                 row.innerHTML = `
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <td class="px-6 py-4 font-medium acm-text-light whitespace-nowrap">
                         <div class="flex items-center">
-                             <img src="${player.photoUrl || 'https://placehold.co/32x32/DDDDDD/555555?text=P'}" alt="${player.name}" class="w-8 h-8 rounded-full mr-3 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/32x32/DDDDDD/555555?text=P';">
+                             <img src="${player.photoUrl || 'https://placehold.co/32x32/333333/E0E0E0?text=P'}" alt="${player.name}" class="w-8 h-8 rounded-full mr-3 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/32x32/333333/E0E0E0?text=P';">
                             <div>
                                 ${player.name}
-                                ${player.note ? `<span class="text-xs text-gray-500 block">${player.note}</span>` : ''}
+                                ${player.note ? `<span class="text-xs acm-text-secondary block">${player.note}</span>` : ''}
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 hidden md:table-cell">${player.age}</td>
-                    <td class="px-6 py-4">${player.appearances === null ? 'N/A' : player.appearances}</td>
-                    <td class="px-6 py-4">${player.goals === null ? 'N/A' : player.goals}</td>
-                    <td class="px-6 py-4">${formatValue(player.value)}</td>
+                    <td class="px-6 py-4 hidden md:table-cell acm-text-secondary">${player.age}</td>
+                    <td class="px-6 py-4 acm-text-secondary">${player.appearances === null ? 'N/A' : player.appearances}</td>
+                    <td class="px-6 py-4 acm-text-secondary">${player.goals === null ? 'N/A' : player.goals}</td>
+                    <td class="px-6 py-4 acm-text-secondary">${formatValue(player.value)}</td>
                 `;
                 tableBody.appendChild(row);
             });
 
+            // Add click event listeners to new rows for opening player modal
             document.querySelectorAll('.table-row-clickable').forEach(row => {
                 row.addEventListener('click', (e) => {
                     const playerId = e.currentTarget.dataset.playerId;
@@ -727,70 +745,76 @@
             });
         }
 
+        // Function to open the player detail modal
         function openPlayerModal(playerId) {
             const player = AppData.squad.find(p => p.id === playerId);
-            if (!player) return;
+            if (!player) return; // Player not found
 
             const modal = document.getElementById('player-modal');
             const modalContent = modal.querySelector('.modal-content');
             const modalBody = document.getElementById('modal-body');
             document.getElementById('modal-player-name').textContent = player.name;
 
-            let statsHtml;
+            let statsHtml; // HTML for player stats section
+            // Determine chart type based on player position
             if (player.position === 'FW' || player.position === 'MF') {
                 statsHtml = `
-                    <div class="text-center font-semibold text-lg mb-2">Chỉ số tấn công & sáng tạo</div>
+                    <div class="text-center font-semibold text-lg mb-2 acm-text-red">Chỉ số tấn công & sáng tạo</div>
                     <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="playerRadarChart"></canvas></div>`;
             } else if (player.position === 'DF') {
                 statsHtml = `
-                    <div class="text-center font-semibold text-lg mb-2">Chỉ số phòng ngự</div>
+                    <div class="text-center font-semibold text-lg mb-2 acm-text-red">Chỉ số phòng ngự</div>
                     <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="playerBarChart"></canvas></div>`;
-            } else { // GK
+            } else { // Goalkeeper (GK)
                 statsHtml = `
-                    <div class="text-center font-semibold text-lg mb-2">Thống kê thủ môn</div>
-                    <div class="p-4 bg-slate-100 rounded-lg text-center">
-                         <h4 class="font-medium text-slate-500">Số trận giữ sạch lưới</h4>
-                         <p class="text-4xl font-bold text-slate-800 mt-2">${player.stats.cleanSheets !== undefined && player.stats.cleanSheets !== null ? player.stats.cleanSheets : 'N/A'}</p>
+                    <div class="text-center font-semibold text-lg mb-2 acm-text-red">Thống kê thủ môn</div>
+                    <div class="p-4 bg-gray-800 rounded-lg text-center"> 
+                         <h4 class="font-medium text-gray-400">Số trận giữ sạch lưới</h4>
+                         <p class="text-4xl font-bold acm-text-light mt-2">${player.stats.cleanSheets !== undefined && player.stats.cleanSheets !== null ? player.stats.cleanSheets : 'N/A'}</p>
                     </div>`;
             }
 
+            // Populate modal body with player information and stats chart
             modalBody.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-1 flex flex-col items-center">
-                        <img src="${player.photoUrl || 'https://placehold.co/160x160/DDDDDD/555555?text=Player'}" alt="${player.name}" class="w-40 h-40 rounded-full mb-4 object-cover border-4 border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/160x160/DDDDDD/555555?text=Player';">
-                        <div class="bg-white p-4 rounded-lg shadow-sm w-full">
-                            <h4 class="font-bold text-lg mb-2 text-center">Thông tin chung</h4>
+                        <img src="${player.photoUrl || 'https://placehold.co/160x160/333333/E0E0E0?text=Player'}" alt="${player.name}" class="w-40 h-40 rounded-full mb-4 object-cover border-4 acm-border-dark" onerror="this.onerror=null;this.src='https://placehold.co/160x160/333333/E0E0E0?text=Player';">
+                        <div class="acm-bg-surface-header p-4 rounded-lg shadow-sm w-full">
+                            <h4 class="font-bold text-lg mb-2 text-center acm-text-red">Thông tin chung</h4>
                             <div class="space-y-1 text-sm">
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Vị trí:</strong> ${player.position}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Tuổi:</strong> ${player.age}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Quốc tịch:</strong> ${player.nationality}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Hợp đồng:</strong> ${player.contractUntil}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Số trận:</strong> ${player.appearances === null ? 'N/A' : player.appearances}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Bàn thắng:</strong> ${player.goals === null ? 'N/A' : player.goals}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Kiến tạo:</strong> ${player.assists !== undefined && player.assists !== null ? player.assists : 'N/A'}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Giá trị TT:</strong> €${formatValue(player.value)}M</p>
-                                ${player.note ? `<p><strong class="font-semibold text-slate-600 w-28 inline-block">Ghi chú:</strong> ${player.note}</p>` : ''}
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Vị trí:</strong> <span class="acm-text-light">${player.position}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Tuổi:</strong> <span class="acm-text-light">${player.age}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Quốc tịch:</strong> <span class="acm-text-light">${player.nationality}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Hợp đồng:</strong> <span class="acm-text-light">${player.contractUntil}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Số trận:</strong> <span class="acm-text-light">${player.appearances === null ? 'N/A' : player.appearances}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Bàn thắng:</strong> <span class="acm-text-light">${player.goals === null ? 'N/A' : player.goals}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Kiến tạo:</strong> <span class="acm-text-light">${player.assists !== undefined && player.assists !== null ? player.assists : 'N/A'}</span></p>
+                                <p><strong class="font-semibold acm-text-secondary w-28 inline-block">Giá trị TT:</strong> <span class="acm-text-light">€${formatValue(player.value)}M</span></p>
+                                ${player.note ? `<p><strong class="font-semibold acm-text-secondary w-28 inline-block">Ghi chú:</strong> <span class="acm-text-light">${player.note}</span></p>` : ''}
                             </div>
                         </div>
                     </div>
-                    <div class="md:col-span-2 bg-white p-4 rounded-lg shadow-sm">
+                    <div class="md:col-span-2 acm-bg-surface-header p-4 rounded-lg shadow-sm">
                          ${statsHtml}
                     </div>
                 </div>
             `;
 
+            // Display the modal with transition
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             setTimeout(() => {
                 if (modal) modal.style.opacity = '1';
                 if (modalContent) modalContent.style.transform = 'scale(1)';
-            }, 10);
+            }, 10); // Short delay for CSS transition
 
+            // Destroy existing charts before creating new ones to prevent conflicts
             if (charts.playerRadar) charts.playerRadar.destroy();
             if (charts.playerBar) charts.playerBar.destroy();
 
-            const playerStats = player.stats || {};
+            const playerStats = player.stats || {}; // Ensure playerStats is an object
 
+            // Initialize the appropriate chart for the player
             if (player.position === 'FW' || player.position === 'MF') {
                 initPlayerRadarChart(player.name, playerStats);
             } else if (player.position === 'DF') {
@@ -798,13 +822,14 @@
             }
         }
 
+        // Function to close the player detail modal
         function closeModal() {
             const modal = document.getElementById('player-modal');
             const modalContent = modal.querySelector('.modal-content');
             if (modal) modal.style.opacity = '0';
             if (modalContent) modalContent.style.transform = 'scale(0.95)';
 
-            setTimeout(() => {
+            setTimeout(() => { // Wait for transition to complete
                 if (modal) {
                     modal.classList.add('hidden');
                     modal.classList.remove('flex');
@@ -812,9 +837,10 @@
             }, 300);
         }
 
+        // Function to initialize general charts (Serie A performance, Revenue)
         function initCharts() {
             Chart.defaults.font.family = 'Inter';
-            Chart.defaults.color = '#334155';
+            Chart.defaults.color = '#E0E0E0'; // Light text for chart defaults
 
             const serieAChartElement = document.getElementById('serieAChart');
             if (serieAChartElement) {
@@ -828,14 +854,14 @@
                             label: 'Điểm số Serie A',
                             data: AppData.performance.serieA.points,
                             backgroundColor: [
-                                'rgba(255, 159, 64, 0.5)',
-                                'rgba(239, 68, 68, 0.5)',
-                                'rgba(59, 130, 246, 0.5)',
-                                'rgba(34, 197, 94, 0.5)',
+                                'rgba(255, 159, 64, 0.7)', // Orange
+                                'rgba(229, 57, 53, 0.7)',  // AC Milan Red
+                                'rgba(59, 130, 246, 0.7)', // Blue
+                                'rgba(34, 197, 94, 0.7)',  // Green
                             ],
                             borderColor: [
                                 'rgb(255, 159, 64)',
-                                'rgb(239, 68, 68)',
+                                'rgb(229, 57, 53)',
                                 'rgb(59, 130, 246)',
                                 'rgb(34, 197, 94)',
                             ],
@@ -847,9 +873,20 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
-                            title: { display: true, text: 'So sánh điểm số cuối mùa' }
+                            title: { display: true, text: 'So sánh điểm số cuối mùa', color: '#E0E0E0' }
                         },
-                        scales: { y: { beginAtZero: true, suggestedMax: 80 } }
+                        scales: { 
+                            y: { 
+                                beginAtZero: true, 
+                                suggestedMax: 80,
+                                ticks: { color: '#A0A0A0' }, // Axis ticks color
+                                grid: { color: 'rgba(224, 224, 224, 0.1)' } // Grid line color
+                            },
+                            x: {
+                                ticks: { color: '#A0A0A0' },
+                                grid: { color: 'rgba(224, 224, 224, 0.1)' }
+                            }
+                        }
                     }
                 });
             }
@@ -867,10 +904,11 @@
                             label: 'Cơ cấu doanh thu (€M)',
                             data: AppData.finance.revenue.data,
                             backgroundColor: [
-                                'rgba(239, 68, 68, 0.7)',
-                                'rgba(59, 130, 246, 0.7)',
-                                'rgba(245, 158, 11, 0.7)',
+                                'rgba(229, 57, 53, 0.8)',  // AC Milan Red
+                                'rgba(255, 0, 0, 0.6)',    // Lighter Red
+                                'rgba(150, 0, 0, 0.7)',    // Darker Red
                             ],
+                             borderColor: '#1E1E1E', // Match surface background for separation
                             hoverOffset: 4
                         }]
                     },
@@ -878,14 +916,15 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'top' },
-                            title: { display: true, text: 'Cơ cấu doanh thu 2023-2024' }
+                            legend: { position: 'top', labels: {color: '#E0E0E0'} },
+                            title: { display: true, text: 'Cơ cấu doanh thu 2023-2024', color: '#E0E0E0' }
                         }
                     }
                 });
             }
         }
 
+        // Function to initialize player-specific radar chart
         function initPlayerRadarChart(playerName, playerStats) {
             const ctx = document.getElementById('playerRadarChart').getContext('2d');
             const dataValues = [
@@ -893,7 +932,7 @@
                 playerStats.assists || 0,
                 playerStats.xG || 0,
                 playerStats.xA || 0,
-                (playerStats.keyPasses || 0) > 100 ? (playerStats.keyPasses / 10) : ((playerStats.keyPasses || 0) / 5) // Scaled for better visualization if too high
+                (playerStats.keyPasses || 0) > 100 ? (playerStats.keyPasses / 10) : ((playerStats.keyPasses || 0) / 5)
             ];
 
             charts.playerRadar = new Chart(ctx, {
@@ -904,63 +943,51 @@
                         label: playerName,
                         data: dataValues,
                         fill: true,
-                        backgroundColor: 'rgba(239, 68, 68, 0.2)', // Milan red, semi-transparent
-                        borderColor: 'rgb(239, 68, 68)', // Milan red
-                        pointBackgroundColor: 'rgb(239, 68, 68)',
-                        pointBorderColor: '#fff',
+                        backgroundColor: 'rgba(229, 57, 53, 0.4)', // AC Milan Red, more transparent
+                        borderColor: 'rgb(229, 57, 53)',      // AC Milan Red
+                        pointBackgroundColor: 'rgb(229, 57, 53)',
+                        pointBorderColor: '#fff', // White border for points
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(239, 68, 68)'
+                        pointHoverBorderColor: 'rgb(229, 57, 53)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     elements: {
-                        line: {
-                            tension: 0, // Straight lines
-                            borderWidth: 3
-                        }
+                        line: { tension: 0, borderWidth: 2 }
                     },
                     scales: {
                         r: {
-                            angleLines: {
-                                display: true // Lines from center to labels
+                            angleLines: { display: true, color: 'rgba(224, 224, 224, 0.2)' }, // Lighter angle lines
+                            suggestMin: 0,
+                            ticks: { 
+                                display: false, // Numbers on radial axis hidden
+                                backdropColor: 'transparent', // Make ticks backdrop transparent
+                                color: '#A0A0A0' // Though hidden, set color for consistency if ever shown
                             },
-                            suggestMin: 0, // Radial axis starts at 0
-                            ticks: {
-                                display: false, // THIS HIDES THE NUMBERS ON THE RADIAL AXIS (e.g., 0, 2, 4, ...)
-                                backdropPadding: 0,
-                                // stepSize is less relevant if ticks are not displayed, but Chart.js might still use it for grid line calculation
-                                stepSize: Math.max(...dataValues.filter(v => typeof v === 'number' && !isNaN(v))) > 10 ? 5 : 2 
-                            },
-                            pointLabels: { // Labels like "Bàn thắng", "Kiến tạo"
+                            pointLabels: { // Labels like "Bàn thắng"
                                 display: true,
-                                font: {
-                                    size: 12
-                                },
-                                color: '#334155' // slate-700
+                                font: { size: 12 },
+                                color: '#E0E0E0' // Light text for point labels
                             },
-                            grid: { // Grid lines
-                                color: 'rgba(0, 0, 0, 0.1)' // Lighter grid lines
-                            }
+                            grid: { color: 'rgba(224, 224, 224, 0.2)' } // Lighter grid lines
                         }
                     },
                     plugins: {
-                        legend: {
-                            display: false // Hide legend if only one dataset
-                        },
-                        tooltip: { // Customize tooltips
+                        legend: { display: false },
+                        tooltip: {
                             enabled: true,
+                            backgroundColor: 'rgba(0,0,0,0.8)', // Dark tooltip
+                            titleColor: '#E0E0E0',
+                            bodyColor: '#E0E0E0',
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    if (label) { label += ': '; }
                                     if (context.parsed.r !== null) {
-                                        // For scaled values, you might want to show the original value or indicate it's scaled
                                         if (context.label === 'Ch. Quyết định (scaled)') {
-                                            label += (playerStats.keyPasses || 0) + ' (Value on chart: ' + context.parsed.r.toFixed(2) + ')';
+                                            label += (playerStats.keyPasses || 0) + ' (Chart: ' + context.parsed.r.toFixed(2) + ')';
                                         } else {
                                             label += context.parsed.r.toFixed(2);
                                         }
@@ -974,6 +1001,7 @@
             });
         }
 
+        // Function to initialize player-specific bar chart (for defenders)
         function initPlayerBarChart(playerName, playerStats) {
             const ctx = document.getElementById('playerBarChart').getContext('2d');
             charts.playerBar = new Chart(ctx, {
@@ -982,31 +1010,30 @@
                     labels: ['Tắc bóng', 'Cắt bóng', 'xA (scaled)'],
                     datasets: [{
                         label: 'Chỉ số phòng ngự',
-                        data: [playerStats.tackles || 0, playerStats.interceptions || 0, (playerStats.xA || 0) * 10], // Scaled xA for visibility
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)', // Tailwind blue-500, semi-transparent
-                        borderColor: 'rgb(59, 130, 246)', // Tailwind blue-500
+                        data: [playerStats.tackles || 0, playerStats.interceptions || 0, (playerStats.xA || 0) * 10],
+                        backgroundColor: 'rgba(229, 57, 53, 0.7)', // AC Milan Red for bars
+                        borderColor: 'rgb(229, 57, 53)',
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y', // Horizontal bar chart
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
                             enabled: true,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#E0E0E0',
+                            bodyColor: '#E0E0E0',
                              callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    if (label) { label += ': '; }
                                     if (context.parsed.x !== null) {
                                         if (context.label === 'xA (scaled)') {
-                                            label += (playerStats.xA || 0).toFixed(2) + ' (Value on chart: ' + context.parsed.x.toFixed(2) + ')';
+                                            label += (playerStats.xA || 0).toFixed(2) + ' (Chart: ' + context.parsed.x.toFixed(2) + ')';
                                         } else {
                                             label += context.parsed.x.toFixed(2);
                                         }
@@ -1019,35 +1046,36 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                             grid: {
-                                color: 'rgba(0, 0, 0, 0.05)' // Lighter grid lines
-                            }
+                            ticks: { color: '#A0A0A0' },
+                            grid: { color: 'rgba(224, 224, 224, 0.1)' }
                         },
                         y: {
-                             grid: {
-                                display: false // Hide y-axis grid lines for cleaner look
-                            }
+                            ticks: { color: '#A0A0A0' },
+                            grid: { display: false }
                         }
                     }
                 }
             });
         }
 
+        // Function to render the management table
         function renderManagementTable() {
             const tableBody = document.getElementById('management-table-body');
             if (!tableBody) return;
             tableBody.innerHTML = '';
             AppData.management.forEach(member => {
                 const row = document.createElement('tr');
+                row.className = 'border-b acm-border-dark';
                 row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${member.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${member.role}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${member.affiliation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium acm-text-light">${member.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm acm-text-secondary">${member.role}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm acm-text-secondary">${member.affiliation}</td>
                 `;
                 tableBody.appendChild(row);
             });
         }
 
+        // Function to render transfer tables (incoming and outgoing)
         function renderTransferTables() {
             const transfersInBody = document.getElementById('transfers-in-table-body');
             const transfersOutBody = document.getElementById('transfers-out-table-body');
@@ -1056,10 +1084,11 @@
                 transfersInBody.innerHTML = '';
                 AppData.transfers.incoming.forEach(player => {
                     const row = document.createElement('tr');
+                     row.className = 'border-b acm-border-dark';
                     row.innerHTML = `
-                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${player.name} <span class="text-xs text-gray-500">(${player.position})</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">${player.from}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${player.fee}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium acm-text-light">${player.name} <span class="text-xs text-gray-400">(${player.position})</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm acm-text-secondary hidden sm:table-cell">${player.from}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm acm-text-secondary">${player.fee}</td>
                     `;
                     transfersInBody.appendChild(row);
                 });
@@ -1069,75 +1098,84 @@
                 transfersOutBody.innerHTML = '';
                 AppData.transfers.outgoing.forEach(player => {
                     const row = document.createElement('tr');
+                    row.className = 'border-b acm-border-dark';
                     row.innerHTML = `
-                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${player.name} <span class="text-xs text-gray-500">(${player.position})</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">${player.to}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${player.fee}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium acm-text-light">${player.name} <span class="text-xs text-gray-400">(${player.position})</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm acm-text-secondary hidden sm:table-cell">${player.to}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm acm-text-secondary">${player.fee}</td>
                     `;
                     transfersOutBody.appendChild(row);
                 });
             }
         }
 
-
+        // Main script execution after DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('.app-section');
             const mobileNav = document.getElementById('mobile-nav');
 
+            // Function to switch between tabs/sections
             function switchTab(targetId) {
                 sections.forEach(section => {
-                    if (section.id === targetId) {
-                        section.classList.remove('hidden');
-                    } else {
-                        section.classList.add('hidden');
-                    }
+                    section.classList.toggle('hidden', section.id !== targetId);
                 });
 
                 navLinks.forEach(link => {
-                    if (link.dataset.target === targetId) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
+                    link.classList.toggle('active', link.dataset.target === targetId);
                 });
-
+                
                 // Initialize charts only when the respective tab is active and elements are visible
                 if (targetId === 'performance' && document.getElementById('serieAChart')) {
-                     // Delay init slightly if needed for tab visibility to propagate
-                    setTimeout(() => initCharts(), 0);
+                    setTimeout(() => initCharts(), 0); // initCharts handles both Serie A and Revenue
                 }
-                if (targetId === 'off-pitch' && document.getElementById('revenueChart')) {
-                     // Delay init slightly
-                    setTimeout(() => {
-                        initCharts(); // Initializes revenueChart
+                if (targetId === 'off-pitch') {
+                     setTimeout(() => {
+                        if(document.getElementById('revenueChart')) initCharts(); // Re-init if needed, or ensure it's already done
                         renderManagementTable();
                         renderTransferTables();
                     },0);
                 }
                  if (targetId === 'squad') {
-                    renderSquadTable(AppData.squad); // Ensure table is rendered when tab is switched to
+                    renderSquadTable(AppData.squad);
                 }
 
-
-                mobileNav.value = targetId;
-                window.scrollTo(0, 0);
+                if(mobileNav) mobileNav.value = targetId;
+                window.scrollTo(0, 0); // Scroll to top on tab switch
             }
 
+            // Event listeners for desktop navigation
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    switchTab(e.target.dataset.target);
+                    // Ensure we get the correct target from the link, even if an icon inside is clicked
+                    const targetLink = e.target.closest('.nav-link');
+                    if (targetLink) {
+                        switchTab(targetLink.dataset.target);
+                    }
                 });
             });
 
-            mobileNav.addEventListener('change', (e) => {
+            // Event listener for mobile navigation
+            if(mobileNav) mobileNav.addEventListener('change', (e) => {
                 switchTab(e.target.value);
             });
 
-            document.getElementById('position-filter').addEventListener('change', (e) => {
-                const position = e.target.value;
-                const nameQuery = document.getElementById('name-search').value.toLowerCase();
+            // Event listener for position filter in squad section
+            const positionFilter = document.getElementById('position-filter');
+            if(positionFilter) positionFilter.addEventListener('change', (e) => {
+                applySquadFilters();
+            });
+
+            // Event listener for name search in squad section
+            const nameSearch = document.getElementById('name-search');
+            if(nameSearch) nameSearch.addEventListener('input', (e) => {
+                applySquadFilters();
+            });
+            
+            function applySquadFilters() {
+                const position = positionFilter ? positionFilter.value : 'all';
+                const nameQuery = nameSearch ? nameSearch.value.toLowerCase() : '';
                 let filteredData = AppData.squad;
 
                 if (position !== 'all') {
@@ -1146,25 +1184,11 @@
                 if (nameQuery) {
                     filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
                 }
-
                 renderSquadTable(filteredData);
-            });
+            }
 
-            document.getElementById('name-search').addEventListener('input', (e) => {
-                const nameQuery = e.target.value.toLowerCase();
-                const position = document.getElementById('position-filter').value;
-                let filteredData = AppData.squad;
 
-                if (position !== 'all') {
-                    filteredData = filteredData.filter(p => p.position === position);
-                }
-                if (nameQuery) {
-                    filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
-                }
-
-                renderSquadTable(filteredData);
-            });
-
+            // Event listeners for table header sorting
             document.querySelectorAll('.table-header-sortable').forEach(header => {
                 header.addEventListener('click', (e) => {
                     const column = e.currentTarget.dataset.sort;
@@ -1174,40 +1198,29 @@
                         currentSort.column = column;
                         currentSort.direction = 'asc';
                     }
-                    const position = document.getElementById('position-filter').value;
-                    const nameQuery = document.getElementById('name-search').value.toLowerCase();
-                    let filteredData = AppData.squad;
-                    if (position !== 'all') {
-                        filteredData = filteredData.filter(p => p.position === position);
-                    }
-                    if (nameQuery) {
-                        filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
-                    }
-                    renderSquadTable(filteredData);
+                    applySquadFilters(); // Re-render table with new sort
                 });
             });
 
+            // Event listeners for player modal
             document.getElementById('close-modal-btn').addEventListener('click', closeModal);
             document.getElementById('player-modal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) {
+                if (e.target === e.currentTarget) { // Close if backdrop is clicked
                     closeModal();
                 }
             });
 
-            // Initial setup
-            const initialTab = 'overview'; // Or read from URL hash if you want deep linking
+            // Initial setup: display the default tab
+            const initialTab = 'overview'; 
             switchTab(initialTab);
-            if (navLinks.length > 0) { // Ensure navLinks exist
-                const activeLink = Array.from(navLinks).find(link => link.dataset.target === initialTab);
+             // Set the first nav link as active if no specific logic for initial active tab
+            if (navLinks.length > 0 && !document.querySelector('.nav-link.active')) {
+                 const activeLink = Array.from(navLinks).find(link => link.dataset.target === initialTab);
                 if (activeLink) {
                     activeLink.classList.add('active');
-                } else if (navLinks[0]) { // Fallback to first link if specific one not found
+                } else if (navLinks[0]) { 
                      navLinks[0].classList.add('active');
                 }
-            }
-             // Render squad table on initial load if the squad tab is the default or if needed
-            if (initialTab === 'squad' || !document.getElementById('squad').classList.contains('hidden')) {
-                 renderSquadTable(AppData.squad);
             }
         });
     </script>
