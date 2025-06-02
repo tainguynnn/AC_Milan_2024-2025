@@ -28,10 +28,24 @@
             height: 320px;
             max-height: 40vh;
         }
+         /* Smaller chart container for GK stats in modal */
+        .gk-chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Smaller max-width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 180px; /* Adjusted height */
+            max-height: 25vh;
+        }
+
 
         @media (min-width: 768px) {
             .chart-container {
                 height: 400px;
+            }
+            .gk-chart-container {
+                height: 200px; /* Adjusted height for md screens */
             }
         }
 
@@ -573,7 +587,7 @@
     </main>
 
     <div id="player-modal"
-        class="fixed inset-0 bg-black bg-opacity-75 z-[100] items-center justify-center hidden modal-backdrop">  
+        class="fixed inset-0 bg-black bg-opacity-75 z-[100] items-center justify-center hidden modal-backdrop"> 
         <div
             class="acm-bg-surface rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto m-8 modal-content transform scale-95">
             <div class="sticky top-0 acm-bg-surface-header p-4 border-b acm-border-dark flex justify-between items-center z-10">
@@ -589,9 +603,9 @@
     <script>
         const AppData = {
             squad: [
-                { "id": 1, "name": "Mike Maignan", "position": "GK", "age": 29, "appearances": 17, "goals": 0, "assists": 0, "value": 25.0, "nationality": "Pháp", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/191210/image", "stats": { "cleanSheets": null, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
-                { "id": 2, "name": "Marco Sportiello", "position": "GK", "age": 33, "appearances": 3, "goals": 0, "assists": 0, "value": 0.5, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/176301/image", "stats": { "cleanSheets": 0, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
-                { "id": 3, "name": "Lorenzo Torriani", "position": "GK", "age": 20, "appearances": null, "goals": 0, "assists": 0, "value": 0.1, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1403294/image", "stats": { "cleanSheets": 0, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 1, "name": "Mike Maignan", "position": "GK", "age": 29, "appearances": 17, "goals": 0, "assists": 0, "value": 25.0, "nationality": "Pháp", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/191210/image", "stats": { "cleanSheets": 7, "saves": 53, "savePercentage": 78.5, "goalsConceded": 18, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 2, "name": "Marco Sportiello", "position": "GK", "age": 33, "appearances": 3, "goals": 0, "assists": 0, "value": 0.5, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/176301/image", "stats": { "cleanSheets": 1, "saves": 10, "savePercentage": 65.0, "goalsConceded": 5, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 3, "name": "Lorenzo Torriani", "position": "GK", "age": 20, "appearances": null, "goals": 0, "assists": 0, "value": 0.1, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1403294/image", "stats": { "cleanSheets": 0, "saves": 0, "savePercentage": 0.0, "goalsConceded": 0, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
                 { "id": 4, "name": "Théo Hernandez", "position": "DF", "age": 27, "appearances": 49, "goals": 5, "assists": 4, "value": 40.0, "nationality": "Pháp", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/788027/image", "stats": { "goals": 5, "assists": 4, "xG": 3.17, "xA": 5.34, "keyPasses": 0, "tackles": 60, "interceptions": 35 } },
                 { "id": 5, "name": "Álex Jiménez", "position": "DF", "age": 20, "appearances": 28, "goals": 0, "assists": 2, "value": 10.0, "nationality": "Tây Ban Nha", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/1184308/image", "stats": { "goals": 0, "assists": 2, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
                 { "id": 6, "name": "Emerson Royal", "position": "DF", "age": 26, "appearances": 0, "goals": 0, "assists": 0, "value": 10.0, "nationality": "Brazil", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/856123/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
@@ -766,12 +780,20 @@
                     <div class="text-center font-semibold text-lg mb-2 acm-text-red">Chỉ số phòng ngự</div>
                     <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="playerBarChart"></canvas></div>`;
             } else { // Goalkeeper (GK)
+                const playerStats = player.stats || {};
                 statsHtml = `
-                    <div class="text-center font-semibold text-lg mb-2 acm-text-red">Thống kê thủ môn</div>
-                    <div class="p-4 bg-gray-800 rounded-lg text-center"> 
-                         <h4 class="font-medium text-gray-400">Số trận giữ sạch lưới</h4>
-                         <p class="text-4xl font-bold acm-text-light mt-2">${player.stats.cleanSheets !== undefined && player.stats.cleanSheets !== null ? player.stats.cleanSheets : 'N/A'}</p>
-                    </div>`;
+                    <div class="text-center font-semibold text-lg mb-4 acm-text-red">Thống kê thủ môn</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div class="p-3 bg-gray-800 rounded-lg text-center">
+                            <h4 class="font-medium text-gray-400 text-sm">Trận giữ sạch lưới</h4>
+                            <p class="text-3xl font-bold acm-text-light mt-1">${playerStats.cleanSheets !== undefined && playerStats.cleanSheets !== null ? playerStats.cleanSheets : 'N/A'}</p>
+                        </div>
+                        <div class="p-3 bg-gray-800 rounded-lg text-center">
+                            <h4 class="font-medium text-gray-400 text-sm">Tỷ lệ cản phá</h4>
+                            <p class="text-3xl font-bold acm-text-light mt-1">${playerStats.savePercentage !== undefined && playerStats.savePercentage !== null ? playerStats.savePercentage.toFixed(1) + '%' : 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div class="gk-chart-container"><canvas id="goalkeeperBarChart"></canvas></div>`;
             }
 
             // Populate modal body with player information and stats chart
@@ -811,6 +833,8 @@
             // Destroy existing charts before creating new ones to prevent conflicts
             if (charts.playerRadar) charts.playerRadar.destroy();
             if (charts.playerBar) charts.playerBar.destroy();
+            if (charts.goalkeeperBar) charts.goalkeeperBar.destroy();
+
 
             const playerStats = player.stats || {}; // Ensure playerStats is an object
 
@@ -819,6 +843,8 @@
                 initPlayerRadarChart(player.name, playerStats);
             } else if (player.position === 'DF') {
                 initPlayerBarChart(player.name, playerStats);
+            } else if (player.position === 'GK') {
+                initGoalkeeperBarChart(player.name, playerStats);
             }
         }
 
@@ -962,9 +988,10 @@
                             angleLines: { display: true, color: 'rgba(224, 224, 224, 0.2)' }, // Lighter angle lines
                             suggestMin: 0,
                             ticks: { 
-                                display: false, // Numbers on radial axis hidden
-                                backdropColor: 'transparent', // Make ticks backdrop transparent
-                                color: '#A0A0A0' // Though hidden, set color for consistency if ever shown
+                                display: true, // SHOW numbers on radial axis
+                                backdropColor: 'transparent', 
+                                color: '#A0A0A0',
+                                stepSize: Math.max(...dataValues.filter(v => typeof v === 'number' && !isNaN(v))) > 10 ? 5 : 2
                             },
                             pointLabels: { // Labels like "Bàn thắng"
                                 display: true,
@@ -1057,6 +1084,72 @@
                 }
             });
         }
+
+        // Function to initialize goalkeeper-specific bar chart
+        function initGoalkeeperBarChart(playerName, playerStats) {
+            const canvasElement = document.getElementById('goalkeeperBarChart');
+            if (!canvasElement) return;
+            const ctx = canvasElement.getContext('2d');
+            if (!ctx) return;
+
+            if (charts.goalkeeperBar) {
+                charts.goalkeeperBar.destroy();
+            }
+
+            charts.goalkeeperBar = new Chart(ctx, {
+                type: 'bar', // Horizontal bar chart for better label readability with few items
+                data: {
+                    labels: ['Cú cản phá', 'Bàn thua'],
+                    datasets: [{
+                        label: 'Thống kê',
+                        data: [
+                            playerStats.saves || 0,
+                            playerStats.goalsConceded || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(229, 57, 53, 0.7)', // AC Milan Red for saves
+                            'rgba(100, 100, 100, 0.7)'  // Neutral gray for goals conceded
+                        ],
+                        borderColor: [
+                            'rgb(229, 57, 53)',
+                            'rgb(100, 100, 100)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Makes it a horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false 
+                        },
+                        title: {
+                            display: false, // Title is already above in statsHtml
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#E0E0E0',
+                            bodyColor: '#E0E0E0',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#A0A0A0', stepSize: 10 }, // Adjust stepSize as needed
+                            grid: { color: 'rgba(224, 224, 224, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#E0E0E0' }, // Light color for y-axis labels (Saves, Goals Conceded)
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
 
         // Function to render the management table
         function renderManagementTable() {
