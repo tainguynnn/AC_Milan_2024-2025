@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,49 +18,178 @@
         - Coaching Timeline: Goal: Show change. Method: HTML/Tailwind diagram. Interaction: Static visual. Justification: Clearly illustrates instability.
         All visualizations are rendered on Canvas via Chart.js, with textual content presented in styled cards for context. -->
     <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 320px; max-height: 40vh; }
-        @media (min-width: 768px) { .chart-container { height: 400px; } }
-        .nav-link { transition: color 0.3s, border-color 0.3s; }
-        .nav-link.active { color: #E53935; border-bottom-color: #E53935; }
-        .nav-link:not(.active) { border-bottom-color: transparent; }
-        .modal-backdrop { transition: opacity 0.3s ease-in-out; }
-        .modal-content { transition: transform 0.3s ease-in-out; }
-        .table-header-sortable { cursor: pointer; }
-        .table-header-sortable:hover { background-color: #f0f0f0; }
-        .table-row-clickable { cursor: pointer; transition: background-color 0.2s; }
-        .table-row-clickable:hover { background-color: #fcebeb; }
-        .tournament-logo { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: white; margin-right: 8px; }
-        .serie-a-logo { background-color: #0055A4; } /* Blue for Serie A */
-        .champions-league-logo { background-color: #001E5A; } /* Dark blue for UCL */
-        .coppa-italia-logo { background-color: #009246; } /* Green for Coppa Italia */
-        .supercoppa-logo { background-color: #CEB888; } /* Gold for Supercoppa */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
 
-        .timeline { list-style-type: none; padding-left: 0; position: relative; }
-        .timeline:before { content: ''; background: #d4d9df; display: inline-block; position: absolute; left: 10px; width: 2px; height: 100%; z-index: 0; }
-        .timeline-item { margin: 20px 0; padding-left: 40px; position: relative; }
-        .timeline-item:before { content: ''; background: white; border: 2px solid #E53935; display: inline-block; position: absolute; border-radius: 50%; left: 0px; width: 24px; height: 24px; z-index: 1; text-align: center; line-height: 20px; font-size: 12px; }
-        .timeline-item-content { background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .timeline-item-title { font-weight: bold; margin-bottom: 5px; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 40vh;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .nav-link.active {
+            color: #E53935;
+            border-bottom-color: #E53935;
+        }
+
+        .nav-link:not(.active) {
+            border-bottom-color: transparent;
+        }
+
+        .modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .table-header-sortable {
+            cursor: pointer;
+        }
+
+        .table-header-sortable:hover {
+            background-color: #f0f0f0;
+        }
+
+        .table-row-clickable {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .table-row-clickable:hover {
+            background-color: #fcebeb;
+        }
+
+        .tournament-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-right: 8px;
+        }
+
+        .serie-a-logo {
+            background-color: #0055A4;
+        }
+
+        /* Blue for Serie A */
+        .champions-league-logo {
+            background-color: #001E5A;
+        }
+
+        /* Dark blue for UCL */
+        .coppa-italia-logo {
+            background-color: #009246;
+        }
+
+        /* Green for Coppa Italia */
+        .supercoppa-logo {
+            background-color: #CEB888;
+        }
+
+        /* Gold for Supercoppa */
+
+        .timeline {
+            list-style-type: none;
+            padding-left: 0;
+            position: relative;
+        }
+
+        .timeline:before {
+            content: '';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 10px;
+            width: 2px;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: '';
+            background: white;
+            border: 2px solid #E53935;
+            display: inline-block;
+            position: absolute;
+            border-radius: 50%;
+            left: 0px;
+            width: 24px;
+            height: 24px;
+            z-index: 1;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+        }
+
+        .timeline-item-content {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800">
 
     <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <img src="https://placehold.co/40x40/FF0000/FFFFFF?text=ACM" alt="AC Milan Logo" class="h-8 w-8 rounded-full">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/200px-Logo_of_AC_Milan.svg.png"
+                        alt="AC Milan Logo" class="h-8 w-8 rounded-full">
                     <h1 class="text-lg md:text-xl font-bold text-slate-900">Milan 2024-25</h1>
                 </div>
                 <div class="hidden md:flex items-center space-x-2 md:space-x-4">
-                    <a href="#overview" data-target="overview" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📄 Tổng Quan</a>
-                    <a href="#performance" data-target="performance" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📊 Thành Tích</a>
-                    <a href="#off-pitch" data-target="off-pitch" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">💼 Tài Chính & Hậu Trường</a>
-                    <a href="#squad" data-target="squad" class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">👥 Đội Hình</a>
+                    <a href="#overview" data-target="overview"
+                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📄
+                        Tổng Quan</a>
+                    <a href="#performance" data-target="performance"
+                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">📊
+                        Thành Tích</a>
+                    <a href="#off-pitch" data-target="off-pitch"
+                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">💼
+                        Tài Chính & Hậu Trường</a>
+                    <a href="#squad" data-target="squad"
+                        class="nav-link text-sm md:text-base font-medium text-slate-600 hover:text-red-600 py-2 border-b-2">👥
+                        Đội Hình</a>
                 </div>
                 <div class="md:hidden">
-                    <select id="mobile-nav" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
+                    <select id="mobile-nav"
+                        class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
                         <option value="overview">📄 Tổng Quan</option>
                         <option value="performance">📊 Thành Tích</option>
                         <option value="off-pitch">💼 Tài Chính & Hậu Trường</option>
@@ -71,21 +201,28 @@
     </header>
 
     <main class="container mx-auto p-4 md:p-8">
-        
+
         <section id="overview" class="app-section space-y-8">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📄</span>Mùa Giải Của Những Thái Cực</h2>
-                <p class="mt-2 text-lg text-slate-600">Mùa giải 2024-2025 của AC Milan là một bức tranh phức tạp, nơi vinh quang tại các giải đấu cúp không thể che lấp đi nỗi thất vọng tại Serie A. Báo cáo này phân tích sâu về một năm đầy biến động của Rossoneri, từ sân cỏ đến phòng họp.</p>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📄</span>Mùa
+                    Giải Của Những Thái Cực</h2>
+                <p class="mt-2 text-lg text-slate-600">Mùa giải 2024-2025 của AC Milan là một bức tranh phức tạp, nơi
+                    vinh quang tại các giải đấu cúp không thể che lấp đi nỗi thất vọng tại Serie A. Báo cáo này phân
+                    tích sâu về một năm đầy biến động của Rossoneri, từ sân cỏ đến phòng họp.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500 flex items-center"><div class="tournament-logo serie-a-logo">SA</div>Vị trí Serie A</h3>
+                    <h3 class="font-semibold text-slate-500 flex items-center">
+                        <div class="tournament-logo serie-a-logo">SA</div>Vị trí Serie A
+                    </h3>
                     <p class="text-4xl font-bold text-red-700 mt-2">Hạng 8</p>
                     <p class="text-sm text-slate-500 mt-1">Không đủ điều kiện dự cúp Châu Âu</p>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-semibold text-slate-500 flex items-center"><div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana</h3>
+                    <h3 class="font-semibold text-slate-500 flex items-center">
+                        <div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana
+                    </h3>
                     <p class="text-4xl font-bold text-green-600 mt-2">Vô Địch</p>
                     <p class="text-sm text-slate-500 mt-1">Đánh bại Inter Milan 3-2</p>
                 </div>
@@ -103,7 +240,10 @@
 
             <div class="bg-white p-6 rounded-xl shadow-md">
                 <h3 class="text-2xl font-bold mb-4">Sự Tương Phản Của Mùa Giải</h3>
-                <p class="mb-6 text-slate-600">Thành công ở các giải đấu cúp một trận và sự bất ổn trong cuộc đua đường dài ở giải VĐQG đã định hình nên một mùa giải khó đoán của Milan. Đội bóng có thể thi đấu thăng hoa trong các trận đấu knock-out nhưng lại thiếu đi sự nhất quán cần thiết để cạnh tranh cho Scudetto, dẫn đến sự hụt hẫng lớn cho người hâm mộ.</p>
+                <p class="mb-6 text-slate-600">Thành công ở các giải đấu cúp một trận và sự bất ổn trong cuộc đua đường
+                    dài ở giải VĐQG đã định hình nên một mùa giải khó đoán của Milan. Đội bóng có thể thi đấu thăng hoa
+                    trong các trận đấu knock-out nhưng lại thiếu đi sự nhất quán cần thiết để cạnh tranh cho Scudetto,
+                    dẫn đến sự hụt hẫng lớn cho người hâm mộ.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="border-l-4 border-green-500 pl-4">
                         <h4 class="font-bold text-xl text-green-600">Điểm Sáng</h4>
@@ -130,21 +270,29 @@
         </section>
 
         <section id="performance" class="app-section space-y-8 hidden">
-             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">📊</span>Phân Tích Thành Tích</h2>
-                <p class="mt-2 text-lg text-slate-600">Khám phá hành trình của AC Milan qua bốn đấu trường chính trong mùa giải 2024-2025: từ vinh quang cúp quốc nội đến sự sa sút ở giải VĐQG và đấu trường châu Âu.</p>
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span
+                        class="mr-2 text-2xl">📊</span>Phân Tích Thành Tích</h2>
+                <p class="mt-2 text-lg text-slate-600">Khám phá hành trình của AC Milan qua bốn đấu trường chính trong
+                    mùa giải 2024-2025: từ vinh quang cúp quốc nội đến sự sa sút ở giải VĐQG và đấu trường châu Âu.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-1 flex items-center"><div class="tournament-logo serie-a-logo">SA</div>Serie A: Mùa Giải Đầy Thử Thách</h3>
-                    <p class="text-slate-600 mb-4">Kết thúc ở vị trí thứ 8 với 63 điểm là một kết quả đáng thất vọng, cho thấy sự thiếu ổn định nghiêm trọng trong suốt 38 vòng đấu.</p>
+                    <h3 class="text-2xl font-bold mb-1 flex items-center">
+                        <div class="tournament-logo serie-a-logo">SA</div>Serie A: Mùa Giải Đầy Thử Thách
+                    </h3>
+                    <p class="text-slate-600 mb-4">Kết thúc ở vị trí thứ 8 với 63 điểm là một kết quả đáng thất vọng,
+                        cho thấy sự thiếu ổn định nghiêm trọng trong suốt 38 vòng đấu.</p>
                     <div class="chart-container">
                         <canvas id="serieAChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo champions-league-logo">CL</div>Champions League: Dừng Bước Sớm</h3>
-                    <p class="text-slate-600 mb-4">Dù đã vượt qua vòng bảng, Milan đã bị Feyenoord loại ở vòng play-off, một kết quả dưới kỳ vọng cho một CLB giàu truyền thống châu Âu.</p>
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <div class="tournament-logo champions-league-logo">CL</div>Champions League: Dừng Bước Sớm
+                    </h3>
+                    <p class="text-slate-600 mb-4">Dù đã vượt qua vòng bảng, Milan đã bị Feyenoord loại ở vòng play-off,
+                        một kết quả dưới kỳ vọng cho một CLB giàu truyền thống châu Âu.</p>
                     <div class="flex flex-col space-y-4">
                         <div class="text-center p-4 bg-slate-100 rounded-lg">
                             <p class="font-semibold text-slate-500">Giai đoạn</p>
@@ -157,9 +305,12 @@
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo coppa-italia-logo">CI</div>Coppa Italia: Hành Trình Đến Chung Kết</h3>
-                     <p class="text-slate-600 mb-4">Milan đã thể hiện bản lĩnh ở các trận đấu loại trực tiếp, vượt qua các đối thủ mạnh để vào chung kết, nhưng lại gục ngã ở ngưỡng cửa thiên đường.</p>
-                     <ul class="timeline">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <div class="tournament-logo coppa-italia-logo">CI</div>Coppa Italia: Hành Trình Đến Chung Kết
+                    </h3>
+                    <p class="text-slate-600 mb-4">Milan đã thể hiện bản lĩnh ở các trận đấu loại trực tiếp, vượt qua
+                        các đối thủ mạnh để vào chung kết, nhưng lại gục ngã ở ngưỡng cửa thiên đường.</p>
+                    <ul class="timeline">
                         <li class="timeline-item">
                             <div class="timeline-item-content">
                                 <h4 class="timeline-item-title">Vòng 16 đội</h4>
@@ -186,10 +337,14 @@
                         </li>
                     </ul>
                 </div>
-                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center"><div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana: Tia Sáng An Ủi</h3>
-                    <p class="text-slate-600 mb-4">Chiến thắng thuyết phục trước đại kình địch Inter Milan đã mang về danh hiệu duy nhất của mùa giải, một niềm vui hiếm hoi cho các Milanista.</p>
-                     <div class="flex-grow flex flex-col items-center justify-center text-center p-4 bg-amber-50 rounded-lg">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <div class="tournament-logo supercoppa-logo">SI</div>Supercoppa Italiana: Tia Sáng An Ủi
+                    </h3>
+                    <p class="text-slate-600 mb-4">Chiến thắng thuyết phục trước đại kình địch Inter Milan đã mang về
+                        danh hiệu duy nhất của mùa giải, một niềm vui hiếm hoi cho các Milanista.</p>
+                    <div
+                        class="flex-grow flex flex-col items-center justify-center text-center p-4 bg-amber-50 rounded-lg">
                         <span class="text-6xl text-amber-500">🏆</span>
                         <p class="text-3xl font-bold text-slate-800 mt-4">VÔ ĐỊCH</p>
                         <p class="text-lg text-slate-600">Đánh bại Inter Milan 3-2</p>
@@ -200,13 +355,17 @@
 
         <section id="off-pitch" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">💼</span>Tài Chính & Hậu Trường</h2>
-                <p class="mt-2 text-lg text-slate-600">Những biến động trên sân cỏ song hành cùng các vấn đề về tài chính và mối quan hệ căng thẳng với người hâm mộ. Khám phá những động lực ngoài sân cỏ định hình mùa giải của Milan.</p>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">💼</span>Tài
+                    Chính & Hậu Trường</h2>
+                <p class="mt-2 text-lg text-slate-600">Những biến động trên sân cỏ song hành cùng các vấn đề về tài
+                    chính và mối quan hệ căng thẳng với người hâm mộ. Khám phá những động lực ngoài sân cỏ định hình mùa
+                    giải của Milan.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
                 <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md">
                     <h3 class="text-2xl font-bold mb-1">Sức Khỏe Kinh Tế</h3>
-                    <p class="text-slate-600 mb-4">Dù giá trị CLB tăng, việc không được dự cúp Châu Âu mùa tới sẽ tạo ra áp lực tài chính lớn, dự kiến gây thâm hụt đáng kể.</p>
+                    <p class="text-slate-600 mb-4">Dù giá trị CLB tăng, việc không được dự cúp Châu Âu mùa tới sẽ tạo ra
+                        áp lực tài chính lớn, dự kiến gây thâm hụt đáng kể.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div class="p-4 bg-slate-100 rounded-lg">
                             <h4 class="font-medium text-slate-500">Doanh thu 2023-24</h4>
@@ -223,10 +382,12 @@
                 </div>
                 <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
                     <h3 class="text-2xl font-bold mb-1">Mối Quan Hệ với Người Hâm Mộ</h3>
-                    <p class="text-slate-600 mb-4">Sự bất mãn lên đến đỉnh điểm với các cuộc biểu tình của Curva Sud nhắm vào chủ sở hữu RedBird, phản ánh sự mất kết nối giữa CĐV và ban lãnh đạo.</p>
+                    <p class="text-slate-600 mb-4">Sự bất mãn lên đến đỉnh điểm với các cuộc biểu tình của Curva Sud
+                        nhắm vào chủ sở hữu RedBird, phản ánh sự mất kết nối giữa CĐV và ban lãnh đạo.</p>
                     <blockquote class="border-l-4 border-black pl-4 py-2 bg-gray-100">
                         <p class="text-xl font-semibold italic text-slate-800">"Go Home"</p>
-                        <footer class="text-slate-600 mt-2">— Thông điệp từ các Ultras trong trận đấu cuối cùng của mùa giải.</footer>
+                        <footer class="text-slate-600 mt-2">— Thông điệp từ các Ultras trong trận đấu cuối cùng của mùa
+                            giải.</footer>
                     </blockquote>
                     <h4 class="font-semibold mt-6 mb-2">Các bất bình chính:</h4>
                     <ul class="list-disc list-inside space-y-1 text-slate-700">
@@ -237,60 +398,132 @@
                     </ul>
                 </div>
             </div>
-             <div class="bg-white p-6 rounded-xl shadow-md">
+            <div class="bg-white p-6 rounded-xl shadow-md mt-8">
+                <h3 class="text-2xl font-bold mb-4">Hoạt Động Chuyển Nhượng Mùa Giải 2024-2025</h3>
+                <p class="text-sm text-slate-500 mb-4">Lưu ý: Dữ liệu chuyển nhượng dưới đây mang tính tổng hợp và minh
+                    họa dựa trên các thông tin có sẵn, phí chuyển nhượng có thể thay đổi hoặc không được công bố chính
+                    thức.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-green-700 border-b-2 border-green-200 pb-2">Cầu Thủ
+                            Đến</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-green-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                                            Tên</th>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider hidden sm:table-cell">
+                                            Từ CLB</th>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
+                                            Phí/Loại</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transfers-in-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-red-700 border-b-2 border-red-200 pb-2">Cầu Thủ Đi
+                        </h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-red-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                                            Tên</th>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider hidden sm:table-cell">
+                                            Đến CLB</th>
+                                        <th scope="col"
+                                            class="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">
+                                            Phí/Loại</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transfers-out-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
                 <h3 class="text-2xl font-bold mb-4">Ban Huấn Luyện: Chiếc Ghế Nóng</h3>
-                 <p class="text-slate-600 mb-6">Sự bất ổn ở vị trí HLV là một trong những nguyên nhân chính dẫn đến thành tích kém cỏi. Việc thay tướng giữa dòng và công bố HLV mới cho mùa sau ngay lập tức cho thấy sự thiếu kiên nhẫn và tầm nhìn dài hạn.</p>
+                <p class="text-slate-600 mb-6">Sự bất ổn ở vị trí HLV là một trong những nguyên nhân chính dẫn đến thành
+                    tích kém cỏi. Việc thay tướng giữa dòng và công bố HLV mới cho mùa sau ngay lập tức cho thấy sự
+                    thiếu kiên nhẫn và tầm nhìn dài hạn.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
                     <div>
-                        <img src="https://placehold.co/100x100/EEEEEE/333333?text=Fonseca" alt="Paulo Fonseca" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
+                        <img src="https://dims.apnews.com/dims4/default/791df99/2147483647/strip/false/crop/4480x2984+0+0/resize/1486x990!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F7b%2Fc1%2F70ee58a14626b62bbf4a54a10b74%2Fb093963152df4ac79da6db41da6bc388"
+                            alt="Paulo Fonseca" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
                         <b class="block">Paulo Fonseca</b>
                         <span class="text-xs text-slate-600">Đầu mùa giải - 29/12/2024</span>
                     </div>
                     <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
                     <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
                     <div>
-                        <img src="https://placehold.co/100x100/EEEEEE/333333?text=Conceição" alt="Sérgio Conceição" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
+                        <img src="https://icdn.sempremilan.com/wp-content/uploads/2024/12/sergio-conceicao-official-milan.jpg"
+                            alt="Sérgio Conceição" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover">
                         <b class="block">Sérgio Conceição</b>
                         <span class="text-xs text-slate-600">30/12/2024 - Cuối mùa giải</span>
                     </div>
                     <div class="text-2xl text-slate-400 hidden md:block">&rarr;</div>
-                     <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
+                    <div class="md:hidden text-2xl text-slate-400 my-2">&darr;</div>
                     <div>
-                        <img src="https://placehold.co/100x100/E53935/FFFFFF?text=Allegri" alt="Massimiliano Allegri" class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 border-red-600">
+                        <img src="https://icdn.sempremilan.com/wp-content/uploads/2025/05/GsIXkXbXMAAKUfs.jpeg"
+                            alt="Massimiliano Allegri"
+                            class="w-24 h-24 mx-auto rounded-full mb-2 object-cover border-2 border-red-600">
                         <b class="block">Massimiliano Allegri</b>
                         <span class="text-xs text-slate-600">Bổ nhiệm cho mùa 2025/26</span>
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
+            <div class="bg-white p-6 rounded-xl shadow-md mt-8">
                 <h3 class="text-2xl font-bold mb-4">Thành Phần Ban Lãnh Đạo (Tính đến 02/06/2025)</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chức Vụ/Vai Trò</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liên Kết</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tên</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Chức Vụ/Vai Trò</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Liên Kết</th>
                             </tr>
                         </thead>
                         <tbody id="management-table-body" class="bg-white divide-y divide-gray-200">
-                            
+
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </section>
 
         <section id="squad" class="app-section space-y-8 hidden">
             <div>
-                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span class="mr-2 text-2xl">👥</span>Phân Tích Đội Hình</h2>
-                <p class="mt-2 text-lg text-slate-600">Khám phá chi tiết từng cầu thủ trong đội hình AC Milan mùa giải 2024-2025. Sử dụng bộ lọc để xem theo vị trí và sắp xếp theo các chỉ số khác nhau. Nhấp vào một cầu thủ để xem phân tích sâu hơn.</p>
+                <h2 class="text-3xl font-bold text-slate-900 flex items-center"><span
+                        class="mr-2 text-2xl">👥</span>Phân Tích Đội Hình</h2>
+                <p class="mt-2 text-lg text-slate-600">Khám phá chi tiết từng cầu thủ trong đội hình AC Milan mùa giải
+                    2024-2025. Sử dụng bộ lọc để xem theo vị trí và sắp xếp theo các chỉ số khác nhau. Nhấp vào một cầu
+                    thủ để xem phân tích sâu hơn.</p>
             </div>
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md">
                 <div class="flex flex-col sm:flex-row items-center justify-between mb-4 gap-4">
                     <div class="w-full sm:w-auto">
-                        <label for="position-filter" class="text-sm font-medium text-slate-700 mr-2">Lọc theo vị trí:</label>
-                        <select id="position-filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2">
+                        <label for="position-filter" class="text-sm font-medium text-slate-700 mr-2">Lọc theo vị
+                            trí:</label>
+                        <select id="position-filter"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2">
                             <option value="all">Tất cả</option>
                             <option value="GK">Thủ môn (GK)</option>
                             <option value="DF">Hậu vệ (DF)</option>
@@ -298,8 +531,9 @@
                             <option value="FW">Tiền đạo (FW)</option>
                         </select>
                     </div>
-                     <div class="w-full sm:w-auto">
-                        <input type="text" id="name-search" placeholder="Tìm kiếm theo tên..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2 w-full">
+                    <div class="w-full sm:w-auto">
+                        <input type="text" id="name-search" placeholder="Tìm kiếm theo tên..."
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2 w-full">
                     </div>
                 </div>
 
@@ -308,10 +542,13 @@
                         <thead class="text-xs text-slate-700 uppercase bg-slate-100">
                             <tr>
                                 <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="name">Cầu thủ</th>
-                                <th scope="col" class="px-6 py-3 table-header-sortable hidden md:table-cell" data-sort="age">Tuổi</th>
-                                <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="appearances">Số trận</th>
+                                <th scope="col" class="px-6 py-3 table-header-sortable hidden md:table-cell"
+                                    data-sort="age">Tuổi</th>
+                                <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="appearances">Số trận
+                                </th>
                                 <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="goals">Bàn thắng</th>
-                                <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="value">Giá trị TT (€M)</th>
+                                <th scope="col" class="px-6 py-3 table-header-sortable" data-sort="value">Giá trị TT
+                                    (€M)</th>
                             </tr>
                         </thead>
                         <tbody id="squad-table-body">
@@ -323,11 +560,14 @@
 
     </main>
 
-    <div id="player-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden modal-backdrop">
-        <div class="bg-slate-50 rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto m-8 modal-content transform scale-95">
+    <div id="player-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden modal-backdrop">
+        <div
+            class="bg-slate-50 rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto m-8 modal-content transform scale-95">
             <div class="sticky top-0 bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center z-10">
                 <h3 id="modal-player-name" class="text-2xl font-bold"></h3>
-                <button id="close-modal-btn" class="text-slate-500 hover:text-slate-800 text-3xl leading-none">&times;</button>
+                <button id="close-modal-btn"
+                    class="text-slate-500 hover:text-slate-800 text-3xl leading-none">&times;</button>
             </div>
             <div id="modal-body" class="p-6 space-y-6">
             </div>
@@ -337,36 +577,36 @@
     <script>
         const AppData = {
             squad: [
-                { id: 1, name: 'Mike Maignan', position: 'GK', age: 29, appearances: 53, goals: 0, assists: 0, value: 25.0, nationality: 'Pháp', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Maignan', stats: {cleanSheets: 15, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 2, name: 'Marco Sportiello', position: 'GK', age: 33, appearances: 3, goals: 0, assists: 0, value: 0.5, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Sportiello', stats: {cleanSheets: 0, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 3, name: 'Lorenzo Torriani', position: 'GK', age: 20, appearances: 2, goals: 0, assists: 0, value: 0.1, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Torriani', stats: {cleanSheets: 0, goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 4, name: 'Théo Hernandez', position: 'DF', age: 27, appearances: 49, goals: 5, assists: 4, value: 40.0, nationality: 'Pháp', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Theo+H.', stats: {goals: 5, assists: 4, xG:3.17, xA:5.34, keyPasses:0, tackles:60, interceptions:35} },
-                { id: 5, name: 'Álex Jiménez', position: 'DF', age: 20, appearances: 28, goals: 0, assists: 2, value: 10.0, nationality: 'Tây Ban Nha', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Jimenez', stats: {goals: 0, assists: 2, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 6, name: 'Emerson Royal', position: 'DF', age: 26, appearances: 26, goals: 0, assists: 0, value: 10.0, nationality: 'Brazil', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Emerson', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 7, name: 'Fikayo Tomori', position: 'DF', age: 27, appearances: 36, goals: 0, assists: 2, value: 20.0, nationality: 'Anh', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Tomori', stats: {goals: 0, assists: 2, xG:0.1, xA:0.43, keyPasses:0, tackles:55, interceptions:45} },
-                { id: 8, name: 'Alessandro Florenzi', position: 'DF', age: 34, appearances: 1, goals: 0, assists: 0, value: 1.0, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Florenzi', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 9, name: 'Malick Thiaw', position: 'DF', age: 23, appearances: 31, goals: 1, assists: 0, value: 20.0, nationality: 'Đức', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Thiaw', stats: {goals: 1, assists: 0, xG:0, xA:0.2, keyPasses:0, tackles:40, interceptions:30} },
-                { id: 10, name: 'Strahinja Pavlović', position: 'DF', age: 24, appearances: 35, goals: 2, assists: 0, value: 18.0, nationality: 'Serbia', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Pavlovic', stats: {goals: 2, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 11, name: 'Kyle Walker', position: 'DF', age: 35, appearances: 16, goals: 0, assists: 0, value: 5.0, nationality: 'Anh', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Walker', note: 'Cho mượn (Man City)', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 12, name: 'Davide Bartesaghi', position: 'DF', age: 19, appearances: 7, goals: 0, assists: 0, value: 1.5, nationality: 'Ý', contractUntil: '2026', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Bartesaghi', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 13, name: 'Filippo Terracciano', position: 'DF', age: 22, appearances: 17, goals: 0, assists: 0, value: 7.0, nationality: 'Ý', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Terracciano', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 14, name: 'Matteo Gabbia', position: 'DF', age: 25, appearances: 36, goals: 2, assists: 0, value: 8.0, nationality: 'Ý', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Gabbia', stats: {goals: 2, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 15, name: 'Ruben Loftus-Cheek', position: 'MF', age: 29, appearances: 28, goals: 0, assists: 0, value: 16.0, nationality: 'Anh', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Loftus-C', stats: {goals: 0, assists: 0, xG:0.7, xA:1.9, keyPasses:20, tackles:0, interceptions:0} },
-                { id: 16, name: 'Tijjani Reijnders', position: 'MF', age: 26, appearances: 54, goals: 15, assists: 6, value: 50.0, nationality: 'Hà Lan', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Reijnders', stats: {goals: 15, assists: 6, xG:7.5, xA:5.0, keyPasses:117, tackles:0, interceptions:0} },
-                { id: 17, name: 'Youssouf Fofana', position: 'MF', age: 25, appearances: 52, goals: 1, assists: 8, value: 30.0, nationality: 'Pháp', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Fofana', stats: {goals: 1, assists: 8, xG:1.5, xA:4.0, keyPasses:45, tackles:0, interceptions:0} },
-                { id: 18, name: 'Mattia Liberali', position: 'MF', age: 18, appearances: 1, goals: 0, assists: 0, value: 0.5, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Liberali', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 19, name: 'Warren Bondo', position: 'MF', age: 21, appearances: 5, goals: 0, assists: 0, value: 10.0, nationality: 'Pháp', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Bondo', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 20, name: 'Yunus Musah', position: 'MF', age: 22, appearances: 40, goals: 0, assists: 0, value: 22.0, nationality: 'Mỹ', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Musah', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 21, name: 'Santiago Giménez', position: 'FW', age: 24, appearances: 19, goals: 6, assists: 3, value: 37.0, nationality: 'Mexico', contractUntil: '2029', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Gimenez', stats: {goals: 6, assists: 3, xG:4.8, xA:0.9, keyPasses:15, tackles:0, interceptions:0} },
-                { id: 22, name: 'Luka Jović', position: 'FW', age: 27, appearances: 17, goals: 4, assists: 0, value: 2.5, nationality: 'Serbia', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Jovic', stats: {goals: 4, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 23, name: 'Rafael Leão', position: 'FW', age: 26, appearances: 49, goals: 12, assists: 9, value: 75.0, nationality: 'Bồ Đào Nha', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Leao', stats: {goals: 12, assists: 9, xG:7.6, xA:8.4, keyPasses:70, tackles:0, interceptions:0} },
-                { id: 24, name: 'Christian Pulisic', position: 'FW', age: 26, appearances: 50, goals: 17, assists: 11, value: 50.0, nationality: 'Mỹ', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Pulisic', stats: {goals: 17, assists: 11, xG:12.0, xA:6.4, keyPasses:60, tackles:0, interceptions:0} },
-                { id: 25, name: 'Samuel Chukwueze', position: 'FW', age: 26, appearances: 36, goals: 5, assists: 0, value: 14.0, nationality: 'Nigeria', contractUntil: '2028', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Chukwueze', stats: {goals: 5, assists: 0, xG:4.5, xA:1.5, keyPasses:25, tackles:0, interceptions:0} },
-                { id: 26, name: 'Francesco Camarda', position: 'FW', age: 17, appearances: 14, goals: 0, assists: 0, value: 10.0, nationality: 'Ý', contractUntil: '2027', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Camarda', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 27, name: 'Bob Murphy Omoregbe', position: 'FW', age: 21, appearances: 1, goals: 0, assists: 0, value: 0.2, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Omoregbe', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 28, name: 'João Félix', position: 'FW', age: 25, appearances: 21, goals: 3, assists: 0, value: 25.0, nationality: 'Bồ Đào Nha', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Felix', note: 'Cho mượn (Chelsea)', stats: {goals: 3, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
-                { id: 29, name: 'Tammy Abraham', position: 'FW', age: 27, appearances: 44, goals: 10, assists: 0, value: 15.0, nationality: 'Anh', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Abraham', note: 'Cho mượn (Roma)', stats: {goals: 10, assists: 0, xG:12.5, xA:2.1, keyPasses:20, tackles:0, interceptions:0} },
-                { id: 30, name: 'Riccardo Sottil', position: 'FW', age: 26, appearances: 8, goals: 0, assists: 0, value: 4.0, nationality: 'Ý', contractUntil: '2025', photoUrl: 'https://placehold.co/150x150/DDDDDD/555555?text=Sottil', note: 'Cho mượn (Fiorentina)', stats: {goals: 0, assists: 0, xG:0, xA:0, keyPasses:0, tackles:0, interceptions:0} },
+                { "id": 1, "name": "Mike Maignan", "position": "GK", "age": 29, "appearances": 17, "goals": 0, "assists": 0, "value": 25.0, "nationality": "Pháp", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/191210/image", "stats": { "cleanSheets": null, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 2, "name": "Marco Sportiello", "position": "GK", "age": 33, "appearances": 3, "goals": 0, "assists": 0, "value": 0.5, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/176301/image", "stats": { "cleanSheets": 0, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 3, "name": "Lorenzo Torriani", "position": "GK", "age": 20, "appearances": null, "goals": 0, "assists": 0, "value": 0.1, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1403294/image", "stats": { "cleanSheets": 0, "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 4, "name": "Théo Hernandez", "position": "DF", "age": 27, "appearances": 49, "goals": 5, "assists": 4, "value": 40.0, "nationality": "Pháp", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/788027/image", "stats": { "goals": 5, "assists": 4, "xG": 3.17, "xA": 5.34, "keyPasses": 0, "tackles": 60, "interceptions": 35 } },
+                { "id": 5, "name": "Álex Jiménez", "position": "DF", "age": 20, "appearances": 28, "goals": 0, "assists": 2, "value": 10.0, "nationality": "Tây Ban Nha", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/1184308/image", "stats": { "goals": 0, "assists": 2, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 6, "name": "Emerson Royal", "position": "DF", "age": 26, "appearances": 0, "goals": 0, "assists": 0, "value": 10.0, "nationality": "Brazil", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/856123/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 7, "name": "Fikayo Tomori", "position": "DF", "age": 27, "appearances": 36, "goals": 0, "assists": 2, "value": 20.0, "nationality": "Anh", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/788255/image", "stats": { "goals": 0, "assists": 2, "xG": 0.1, "xA": 0.43, "keyPasses": 0, "tackles": 55, "interceptions": 45 } },
+                { "id": 8, "name": "Alessandro Florenzi", "position": "DF", "age": 34, "appearances": 1, "goals": 0, "assists": 0, "value": 1.0, "nationality": "Ý", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/152420/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 9, "name": "Malick Thiaw", "position": "DF", "age": 23, "appearances": 31, "goals": 1, "assists": 0, "value": 20.0, "nationality": "Đức", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1014286/image", "stats": { "goals": 1, "assists": 0, "xG": 0, "xA": 0.2, "keyPasses": 0, "tackles": 40, "interceptions": 30 } },
+                { "id": 10, "name": "Strahinja Pavlović", "position": "DF", "age": 24, "appearances": 35, "goals": 2, "assists": 0, "value": 18.0, "nationality": "Serbia", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/965893/image", "stats": { "goals": 2, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 11, "name": "Kyle Walker", "position": "DF", "age": 35, "appearances": 16, "goals": 0, "assists": 0, "value": 5.0, "nationality": "Anh", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/44614/image", "note": "Cho mượn (Man City)", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 12, "name": "Davide Bartesaghi", "position": "DF", "age": 19, "appearances": 3, "goals": 0, "assists": 0, "value": 1.5, "nationality": "Ý", "contractUntil": "2026", "photoUrl": "https://img.sofascore.com/api/v1/player/1390489/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 4, "interceptions": 0 } },
+                { "id": 13, "name": "Filippo Terracciano", "position": "DF", "age": 22, "appearances": 15, "goals": 0, "assists": 0, "value": 7.0, "nationality": "Ý", "contractUntil": "2029", "photoUrl": "https://img.sofascore.com/api/v1/player/1034303/image", "stats": { "goals": 0, "assists": 0, "xG": 0.2, "xA": 0.1, "keyPasses": null, "tackles": null, "interceptions": null } },
+                { "id": 14, "name": "Matteo Gabbia", "position": "DF", "age": 25, "appearances": 25, "goals": 1, "assists": 0, "value": 8.0, "nationality": "Ý", "contractUntil": "2029", "photoUrl": "https://img.sofascore.com/api/v1/player/826195/image", "stats": { "goals": 1, "assists": 0, "xG": null, "xA": null, "keyPasses": 17, "tackles": 58, "interceptions": 58 } },
+                { "id": 15, "name": "Ruben Loftus-Cheek", "position": "MF", "age": 29, "appearances": 28, "goals": 0, "assists": 0, "value": 16.0, "nationality": "Anh", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/284441/image", "stats": { "goals": 0, "assists": 0, "xG": 0.7, "xA": 1.9, "keyPasses": 20, "tackles": 0, "interceptions": 0 } },
+                { "id": 16, "name": "Tijjani Reijnders", "position": "MF", "age": 26, "appearances": 54, "goals": 15, "assists": 6, "value": 50.0, "nationality": "Hà Lan", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/893549/image", "stats": { "goals": 15, "assists": 6, "xG": 7.5, "xA": 5.0, "keyPasses": 117, "tackles": 0, "interceptions": 0 } },
+                { "id": 17, "name": "Youssouf Fofana", "position": "MF", "age": 25, "appearances": 52, "goals": 1, "assists": 8, "value": 30.0, "nationality": "Pháp", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/945062/image", "stats": { "goals": 1, "assists": 8, "xG": 1.5, "xA": 4.0, "keyPasses": 45, "tackles": 0, "interceptions": 0 } },
+                { "id": 18, "name": "Mattia Liberali", "position": "MF", "age": 18, "appearances": 1, "goals": 0, "assists": 0, "value": 0.5, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1475557/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 19, "name": "Warren Bondo", "position": "MF", "age": 21, "appearances": 5, "goals": 0, "assists": 0, "value": 10.0, "nationality": "Pháp", "contractUntil": "2029", "photoUrl": "https://img.sofascore.com/api/v1/player/1000366/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 20, "name": "Yunus Musah", "position": "MF", "age": 22, "appearances": 40, "goals": 0, "assists": 0, "value": 22.0, "nationality": "Mỹ", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/983815/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 21, "name": "Santiago Giménez", "position": "FW", "age": 24, "appearances": 19, "goals": 6, "assists": 3, "value": 37.0, "nationality": "Mexico", "contractUntil": "2029", "photoUrl": "https://img.sofascore.com/api/v1/player/892141/image", "stats": { "goals": 6, "assists": 3, "xG": 4.8, "xA": 0.9, "keyPasses": 15, "tackles": 0, "interceptions": 0 } },
+                { "id": 22, "name": "Luka Jović", "position": "FW", "age": 27, "appearances": 17, "goals": 4, "assists": 0, "value": 2.5, "nationality": "Serbia", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/319129/image", "stats": { "goals": 4, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 23, "name": "Rafael Leão", "position": "FW", "age": 26, "appearances": 34, "goals": null, "assists": null, "value": 75.0, "nationality": "Bồ Đào Nha", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/851284/image", "stats": { "goals": null, "assists": null, "xG": 7.6, "xA": 8.4, "keyPasses": 70, "tackles": 0, "interceptions": 0 } },
+                { "id": 24, "name": "Christian Pulisic", "position": "FW", "age": 26, "appearances": 48, "goals": 17, "assists": 11, "value": 50.0, "nationality": "Mỹ", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/817957/image", "stats": { "goals": 17, "assists": 11, "xG": 12.0, "xA": 6.4, "keyPasses": 60, "tackles": 0, "interceptions": 0 } },
+                { "id": 25, "name": "Samuel Chukwueze", "position": "FW", "age": 26, "appearances": 36, "goals": 5, "assists": 0, "value": 14.0, "nationality": "Nigeria", "contractUntil": "2028", "photoUrl": "https://img.sofascore.com/api/v1/player/822470/image", "stats": { "goals": 5, "assists": 0, "xG": 4.5, "xA": 1.5, "keyPasses": 25, "tackles": 0, "interceptions": 0 } },
+                { "id": 26, "name": "Francesco Camarda", "position": "FW", "age": 17, "appearances": 1, "goals": 0, "assists": 0, "value": 10.0, "nationality": "Ý", "contractUntil": "2027", "photoUrl": "https://img.sofascore.com/api/v1/player/1520771/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 27, "name": "Bob Murphy Omoregbe", "position": "FW", "age": 21, "appearances": 1, "goals": 0, "assists": 0, "value": 0.2, "nationality": "Ý", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/1175945/image", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } },
+                { "id": 28, "name": "João Félix", "position": "FW", "age": 25, "appearances": 15, "goals": 2, "assists": 0, "value": 25.0, "nationality": "Bồ Đào Nha", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/851671/image", "note": "Cho mượn (Chelsea)", "stats": { "goals": 2, "assists": 0, "xG": 0.96, "xA": 0.42, "keyPasses": null, "tackles": 0, "interceptions": 0 } },
+                { "id": 29, "name": "Tammy Abraham", "position": "FW", "age": 27, "appearances": 44, "goals": 10, "assists": 0, "value": 15.0, "nationality": "Anh", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/610766/image", "note": "Cho mượn (Roma)", "stats": { "goals": 10, "assists": 0, "xG": 12.5, "xA": 2.1, "keyPasses": 20, "tackles": 0, "interceptions": 0 } },
+                { "id": 30, "name": "Riccardo Sottil", "position": "FW", "age": 26, "appearances": 8, "goals": 0, "assists": 0, "value": 4.0, "nationality": "Ý", "contractUntil": "2025", "photoUrl": "https://img.sofascore.com/api/v1/player/893640/image", "note": "Cho mượn (Fiorentina)", "stats": { "goals": 0, "assists": 0, "xG": 0, "xA": 0, "keyPasses": 0, "tackles": 0, "interceptions": 0 } }
             ],
             performance: {
                 serieA: {
@@ -397,7 +637,32 @@
                 { name: 'Geoffrey Moncada', role: 'Giám đốc Kỹ thuật', affiliation: 'AC Milan' },
                 { name: 'Maikel Oettle', role: 'Giám đốc Thương mại', affiliation: 'AC Milan' },
                 { name: 'Francesca Montini', role: 'Giám đốc Thương hiệu', affiliation: 'AC Milan' }
-            ]
+            ],
+            transfers: {
+                incoming: [
+                    { name: 'Emerson Royal', from: 'Tottenham Hotspur', fee: '€15M', position: 'DF' },
+                    { name: 'Strahinja Pavlović', from: 'Red Bull Salzburg', fee: '€18M', position: 'DF' },
+                    { name: 'Youssouf Fofana', from: 'AS Monaco', fee: '€25M', position: 'MF' },
+                    { name: 'Warren Bondo', from: 'AC Monza', fee: '€8M', position: 'MF' },
+                    { name: 'Santiago Giménez', from: 'Feyenoord', fee: '€40M', position: 'FW' },
+                    { name: 'Kyle Walker', from: 'Manchester City', fee: 'Cho mượn', position: 'DF' },
+                    { name: 'João Félix', from: 'Chelsea', fee: 'Cho mượn', position: 'FW' },
+                    { name: 'Tammy Abraham', from: 'AS Roma', fee: 'Cho mượn', position: 'FW' },
+                    { name: 'Riccardo Sottil', from: 'Fiorentina', fee: 'Cho mượn', position: 'FW' },
+                ],
+                outgoing: [
+                    { name: 'Charles De Ketelaere', to: 'Atalanta BC', fee: '€22M (mua đứt)', position: 'MF' },
+                    { name: 'Alexis Saelemaekers', to: 'Bologna FC', fee: '€10M (mua đứt)', position: 'FW' },
+                    { name: 'Divock Origi', to: 'Nottingham Forest', fee: '€5M', position: 'FW' },
+                    { name: 'Junior Messias', to: 'Genoa CFC', fee: '€3M (mua đứt)', position: 'FW' },
+                    { name: 'Rade Krunić', to: 'Fenerbahçe SK', fee: '€3.5M', position: 'MF' },
+                    { name: 'Simon Kjær', to: 'Hết hợp đồng', fee: 'CNTD', position: 'DF' },
+                    { name: 'Antonio Mirante', to: 'Hết hợp đồng', fee: 'CNTD', position: 'GK' },
+                    { name: 'Olivier Giroud', to: 'Los Angeles FC', fee: 'CNTD', position: 'FW' },
+                    { name: 'Marko Lazetić', to: 'Fortuna Sittard', fee: 'Cho mượn', position: 'FW' },
+                    { name: 'Daniel Maldini', to: 'AC Monza', fee: 'Cho mượn', position: 'MF' },
+                ]
+            }
         };
 
         let currentSort = { column: 'name', direction: 'asc' };
@@ -407,7 +672,7 @@
             if (typeof value === 'number') return value.toFixed(1);
             return 'N/A';
         }
-        
+
         function renderSquadTable(squadData) {
             const tableBody = document.getElementById('squad-table-body');
             tableBody.innerHTML = '';
@@ -415,7 +680,7 @@
             const sortedData = [...squadData].sort((a, b) => {
                 let aVal = a[currentSort.column];
                 let bVal = b[currentSort.column];
-                
+
                 if (typeof aVal === 'string') {
                     aVal = aVal.toLowerCase();
                     bVal = bVal.toLowerCase();
@@ -431,7 +696,7 @@
                 if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
                 return 0;
             });
-            
+
             sortedData.forEach(player => {
                 const row = document.createElement('tr');
                 row.className = 'bg-white border-b table-row-clickable';
@@ -439,7 +704,7 @@
                 row.innerHTML = `
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         <div class="flex items-center">
-                             <img src="${player.photoUrl || 'https://placehold.co/32x32/DDDDDD/555555?text=P'}" alt="${player.name}" class="w-8 h-8 rounded-full mr-3 object-cover">
+                             <img src="${player.photoUrl || 'https://placehold.co/32x32/DDDDDD/555555?text=P'}" alt="${player.name}" class="w-8 h-8 rounded-full mr-3 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/32x32/DDDDDD/555555?text=P';">
                             <div>
                                 ${player.name}
                                 ${player.note ? `<span class="text-xs text-gray-500 block">${player.note}</span>` : ''}
@@ -447,8 +712,8 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 hidden md:table-cell">${player.age}</td>
-                    <td class="px-6 py-4">${player.appearances}</td>
-                    <td class="px-6 py-4">${player.goals}</td>
+                    <td class="px-6 py-4">${player.appearances === null ? 'N/A' : player.appearances}</td>
+                    <td class="px-6 py-4">${player.goals === null ? 'N/A' : player.goals}</td>
                     <td class="px-6 py-4">${formatValue(player.value)}</td>
                 `;
                 tableBody.appendChild(row);
@@ -461,7 +726,7 @@
                 });
             });
         }
-        
+
         function openPlayerModal(playerId) {
             const player = AppData.squad.find(p => p.id === playerId);
             if (!player) return;
@@ -470,7 +735,7 @@
             const modalContent = modal.querySelector('.modal-content');
             const modalBody = document.getElementById('modal-body');
             document.getElementById('modal-player-name').textContent = player.name;
-            
+
             let statsHtml;
             if (player.position === 'FW' || player.position === 'MF') {
                 statsHtml = `
@@ -481,18 +746,18 @@
                     <div class="text-center font-semibold text-lg mb-2">Chỉ số phòng ngự</div>
                     <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="playerBarChart"></canvas></div>`;
             } else { // GK
-                 statsHtml = `
+                statsHtml = `
                     <div class="text-center font-semibold text-lg mb-2">Thống kê thủ môn</div>
                     <div class="p-4 bg-slate-100 rounded-lg text-center">
                          <h4 class="font-medium text-slate-500">Số trận giữ sạch lưới</h4>
-                         <p class="text-4xl font-bold text-slate-800 mt-2">${player.stats.cleanSheets !== undefined ? player.stats.cleanSheets : 'N/A'}</p>
+                         <p class="text-4xl font-bold text-slate-800 mt-2">${player.stats.cleanSheets !== undefined && player.stats.cleanSheets !== null ? player.stats.cleanSheets : 'N/A'}</p>
                     </div>`;
             }
 
             modalBody.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-1 flex flex-col items-center">
-                        <img src="${player.photoUrl || 'https://placehold.co/150x150/DDDDDD/555555?text=Player'}" alt="${player.name}" class="w-40 h-40 rounded-full mb-4 object-cover border-4 border-slate-200">
+                        <img src="${player.photoUrl || 'https://placehold.co/160x160/DDDDDD/555555?text=Player'}" alt="${player.name}" class="w-40 h-40 rounded-full mb-4 object-cover border-4 border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/160x160/DDDDDD/555555?text=Player';">
                         <div class="bg-white p-4 rounded-lg shadow-sm w-full">
                             <h4 class="font-bold text-lg mb-2 text-center">Thông tin chung</h4>
                             <div class="space-y-1 text-sm">
@@ -500,9 +765,9 @@
                                 <p><strong class="font-semibold text-slate-600 w-28 inline-block">Tuổi:</strong> ${player.age}</p>
                                 <p><strong class="font-semibold text-slate-600 w-28 inline-block">Quốc tịch:</strong> ${player.nationality}</p>
                                 <p><strong class="font-semibold text-slate-600 w-28 inline-block">Hợp đồng:</strong> ${player.contractUntil}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Số trận:</strong> ${player.appearances}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Bàn thắng:</strong> ${player.goals}</p>
-                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Kiến tạo:</strong> ${player.assists !== undefined ? player.assists : 'N/A'}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Số trận:</strong> ${player.appearances === null ? 'N/A' : player.appearances}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Bàn thắng:</strong> ${player.goals === null ? 'N/A' : player.goals}</p>
+                                <p><strong class="font-semibold text-slate-600 w-28 inline-block">Kiến tạo:</strong> ${player.assists !== undefined && player.assists !== null ? player.assists : 'N/A'}</p>
                                 <p><strong class="font-semibold text-slate-600 w-28 inline-block">Giá trị TT:</strong> €${formatValue(player.value)}M</p>
                                 ${player.note ? `<p><strong class="font-semibold text-slate-600 w-28 inline-block">Ghi chú:</strong> ${player.note}</p>` : ''}
                             </div>
@@ -520,10 +785,10 @@
                 if (modal) modal.style.opacity = '1';
                 if (modalContent) modalContent.style.transform = 'scale(1)';
             }, 10);
-            
+
             if (charts.playerRadar) charts.playerRadar.destroy();
             if (charts.playerBar) charts.playerBar.destroy();
-            
+
             const playerStats = player.stats || {};
 
             if (player.position === 'FW' || player.position === 'MF') {
@@ -538,7 +803,7 @@
             const modalContent = modal.querySelector('.modal-content');
             if (modal) modal.style.opacity = '0';
             if (modalContent) modalContent.style.transform = 'scale(0.95)';
-            
+
             setTimeout(() => {
                 if (modal) {
                     modal.classList.add('hidden');
@@ -550,10 +815,10 @@
         function initCharts() {
             Chart.defaults.font.family = 'Inter';
             Chart.defaults.color = '#334155';
-            
+
             const serieAChartElement = document.getElementById('serieAChart');
             if (serieAChartElement) {
-                if(charts.serieA) charts.serieA.destroy();
+                if (charts.serieA) charts.serieA.destroy();
                 const serieA_ctx = serieAChartElement.getContext('2d');
                 charts.serieA = new Chart(serieA_ctx, {
                     type: 'bar',
@@ -592,7 +857,7 @@
 
             const revenueChartElement = document.getElementById('revenueChart');
             if (revenueChartElement) {
-                if(charts.revenue) charts.revenue.destroy();
+                if (charts.revenue) charts.revenue.destroy();
                 const revenue_ctx = revenueChartElement.getContext('2d');
                 charts.revenue = new Chart(revenue_ctx, {
                     type: 'doughnut',
@@ -620,15 +885,15 @@
                 });
             }
         }
-        
+
         function initPlayerRadarChart(playerName, playerStats) {
             const ctx = document.getElementById('playerRadarChart').getContext('2d');
             const dataValues = [
-                playerStats.goals || 0, 
-                playerStats.assists || 0, 
-                playerStats.xG || 0, 
+                playerStats.goals || 0,
+                playerStats.assists || 0,
+                playerStats.xG || 0,
                 playerStats.xA || 0,
-                (playerStats.keyPasses || 0) > 100 ? (playerStats.keyPasses / 10) : ((playerStats.keyPasses || 0) / 5)
+                (playerStats.keyPasses || 0) > 100 ? (playerStats.keyPasses / 10) : ((playerStats.keyPasses || 0) / 5) // Scaled for better visualization if too high
             ];
 
             charts.playerRadar = new Chart(ctx, {
@@ -639,8 +904,8 @@
                         label: playerName,
                         data: dataValues,
                         fill: true,
-                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                        borderColor: 'rgb(239, 68, 68)',
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)', // Milan red, semi-transparent
+                        borderColor: 'rgb(239, 68, 68)', // Milan red
                         pointBackgroundColor: 'rgb(239, 68, 68)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
@@ -650,37 +915,124 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    elements: { line: { tension: 0, borderWidth: 3 } },
-                    scales: { r: { angleLines: { display: true }, suggestMin: 0, ticks: { display: true, backdropPadding:0, stepSize: Math.max(...dataValues) > 10 ? 5 : 2 } } },
-                    plugins: { legend: { display: false } }
+                    elements: {
+                        line: {
+                            tension: 0, // Straight lines
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true // Lines from center to labels
+                            },
+                            suggestMin: 0, // Radial axis starts at 0
+                            ticks: {
+                                display: false, // THIS HIDES THE NUMBERS ON THE RADIAL AXIS (e.g., 0, 2, 4, ...)
+                                backdropPadding: 0,
+                                // stepSize is less relevant if ticks are not displayed, but Chart.js might still use it for grid line calculation
+                                stepSize: Math.max(...dataValues.filter(v => typeof v === 'number' && !isNaN(v))) > 10 ? 5 : 2 
+                            },
+                            pointLabels: { // Labels like "Bàn thắng", "Kiến tạo"
+                                display: true,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#334155' // slate-700
+                            },
+                            grid: { // Grid lines
+                                color: 'rgba(0, 0, 0, 0.1)' // Lighter grid lines
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend if only one dataset
+                        },
+                        tooltip: { // Customize tooltips
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        // For scaled values, you might want to show the original value or indicate it's scaled
+                                        if (context.label === 'Ch. Quyết định (scaled)') {
+                                            label += (playerStats.keyPasses || 0) + ' (Value on chart: ' + context.parsed.r.toFixed(2) + ')';
+                                        } else {
+                                            label += context.parsed.r.toFixed(2);
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
 
         function initPlayerBarChart(playerName, playerStats) {
-             const ctx = document.getElementById('playerBarChart').getContext('2d');
-             charts.playerBar = new Chart(ctx, {
+            const ctx = document.getElementById('playerBarChart').getContext('2d');
+            charts.playerBar = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Tắc bóng', 'Cắt bóng', 'xA (scaled)'],
                     datasets: [{
                         label: 'Chỉ số phòng ngự',
-                        data: [playerStats.tackles || 0, playerStats.interceptions || 0, (playerStats.xA || 0) * 10],
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                        borderColor: 'rgb(59, 130, 246)',
+                        data: [playerStats.tackles || 0, playerStats.interceptions || 0, (playerStats.xA || 0) * 10], // Scaled xA for visibility
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)', // Tailwind blue-500, semi-transparent
+                        borderColor: 'rgb(59, 130, 246)', // Tailwind blue-500
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y',
+                    indexAxis: 'y', // Horizontal bar chart
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { beginAtZero: true } }
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        if (context.label === 'xA (scaled)') {
+                                            label += (playerStats.xA || 0).toFixed(2) + ' (Value on chart: ' + context.parsed.x.toFixed(2) + ')';
+                                        } else {
+                                            label += context.parsed.x.toFixed(2);
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                             grid: {
+                                color: 'rgba(0, 0, 0, 0.05)' // Lighter grid lines
+                            }
+                        },
+                        y: {
+                             grid: {
+                                display: false // Hide y-axis grid lines for cleaner look
+                            }
+                        }
+                    }
                 }
             });
         }
-        
+
         function renderManagementTable() {
             const tableBody = document.getElementById('management-table-body');
             if (!tableBody) return;
@@ -696,6 +1048,38 @@
             });
         }
 
+        function renderTransferTables() {
+            const transfersInBody = document.getElementById('transfers-in-table-body');
+            const transfersOutBody = document.getElementById('transfers-out-table-body');
+
+            if (transfersInBody && AppData.transfers && AppData.transfers.incoming) {
+                transfersInBody.innerHTML = '';
+                AppData.transfers.incoming.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${player.name} <span class="text-xs text-gray-500">(${player.position})</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">${player.from}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${player.fee}</td>
+                    `;
+                    transfersInBody.appendChild(row);
+                });
+            }
+
+            if (transfersOutBody && AppData.transfers && AppData.transfers.outgoing) {
+                transfersOutBody.innerHTML = '';
+                AppData.transfers.outgoing.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${player.name} <span class="text-xs text-gray-500">(${player.position})</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">${player.to}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${player.fee}</td>
+                    `;
+                    transfersOutBody.appendChild(row);
+                });
+            }
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('.app-section');
@@ -709,26 +1093,37 @@
                         section.classList.add('hidden');
                     }
                 });
-                
+
                 navLinks.forEach(link => {
-                    if(link.dataset.target === targetId){
+                    if (link.dataset.target === targetId) {
                         link.classList.add('active');
                     } else {
                         link.classList.remove('active');
                     }
                 });
-                
-                if (targetId === 'performance' || targetId === 'off-pitch') {
-                   initCharts(); 
+
+                // Initialize charts only when the respective tab is active and elements are visible
+                if (targetId === 'performance' && document.getElementById('serieAChart')) {
+                     // Delay init slightly if needed for tab visibility to propagate
+                    setTimeout(() => initCharts(), 0);
                 }
-                if (targetId === 'off-pitch') {
-                    renderManagementTable();
+                if (targetId === 'off-pitch' && document.getElementById('revenueChart')) {
+                     // Delay init slightly
+                    setTimeout(() => {
+                        initCharts(); // Initializes revenueChart
+                        renderManagementTable();
+                        renderTransferTables();
+                    },0);
                 }
-                
-                mobileNav.value = targetId; 
-                window.scrollTo(0, 0); 
+                 if (targetId === 'squad') {
+                    renderSquadTable(AppData.squad); // Ensure table is rendered when tab is switched to
+                }
+
+
+                mobileNav.value = targetId;
+                window.scrollTo(0, 0);
             }
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -751,11 +1146,11 @@
                 if (nameQuery) {
                     filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
                 }
-                
+
                 renderSquadTable(filteredData);
             });
 
-             document.getElementById('name-search').addEventListener('input', (e) => {
+            document.getElementById('name-search').addEventListener('input', (e) => {
                 const nameQuery = e.target.value.toLowerCase();
                 const position = document.getElementById('position-filter').value;
                 let filteredData = AppData.squad;
@@ -766,14 +1161,14 @@
                 if (nameQuery) {
                     filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
                 }
-                
+
                 renderSquadTable(filteredData);
             });
-            
+
             document.querySelectorAll('.table-header-sortable').forEach(header => {
                 header.addEventListener('click', (e) => {
                     const column = e.currentTarget.dataset.sort;
-                    if(currentSort.column === column) {
+                    if (currentSort.column === column) {
                         currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                     } else {
                         currentSort.column = column;
@@ -783,9 +1178,9 @@
                     const nameQuery = document.getElementById('name-search').value.toLowerCase();
                     let filteredData = AppData.squad;
                     if (position !== 'all') {
-                         filteredData = filteredData.filter(p => p.position === position);
+                        filteredData = filteredData.filter(p => p.position === position);
                     }
-                     if (nameQuery) {
+                    if (nameQuery) {
                         filteredData = filteredData.filter(p => p.name.toLowerCase().includes(nameQuery));
                     }
                     renderSquadTable(filteredData);
@@ -794,15 +1189,28 @@
 
             document.getElementById('close-modal-btn').addEventListener('click', closeModal);
             document.getElementById('player-modal').addEventListener('click', (e) => {
-                if(e.target === e.currentTarget) {
+                if (e.target === e.currentTarget) {
                     closeModal();
                 }
             });
 
-            switchTab('overview'); 
-            renderSquadTable(AppData.squad); 
-            if (navLinks.length > 0) navLinks[0].classList.add('active'); 
+            // Initial setup
+            const initialTab = 'overview'; // Or read from URL hash if you want deep linking
+            switchTab(initialTab);
+            if (navLinks.length > 0) { // Ensure navLinks exist
+                const activeLink = Array.from(navLinks).find(link => link.dataset.target === initialTab);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                } else if (navLinks[0]) { // Fallback to first link if specific one not found
+                     navLinks[0].classList.add('active');
+                }
+            }
+             // Render squad table on initial load if the squad tab is the default or if needed
+            if (initialTab === 'squad' || !document.getElementById('squad').classList.contains('hidden')) {
+                 renderSquadTable(AppData.squad);
+            }
         });
     </script>
 </body>
+
 </html>
